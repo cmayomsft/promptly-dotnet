@@ -4,7 +4,7 @@ using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Schema;
 using System.Threading.Tasks;
 
-namespace Primitives.Controllers
+namespace AlarmBot.Controllers
 {
     [Route("api/[controller]")]
     public class MessagesController : BotController

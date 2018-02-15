@@ -7,7 +7,7 @@ using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Middleware;
 using Microsoft.Bot.Schema;
 
-namespace Primitives.Controllers
+namespace AlarmBot.Controllers
 {
     public abstract class BotController : Controller
     {

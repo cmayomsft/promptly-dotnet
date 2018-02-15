@@ -6,7 +6,7 @@ using Microsoft.Bot.Builder.Storage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Primitives
+namespace AlarmBot
 {
     public class Startup
     {
