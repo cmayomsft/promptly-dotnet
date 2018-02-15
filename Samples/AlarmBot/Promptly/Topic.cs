@@ -1,16 +1,15 @@
 ﻿using Microsoft.Bot.Builder;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace AlarmBot.Promptly
+namespace Promptly
 {
     // Topic - Abstract base class for modeling a topic of conversation.
     //  S = Interface for the state of the Topic, used to manage the Topic on each turn, 
     //      or call to onReceive().
     //  V = Interface for the resulting value for when the Topic completes successfully.
     //      Optional for cases where the Topic doesn't need to return a value. 
+    // TODO: Make V optional generic type.
     public abstract class Topic<S, V>
     {
         private S state;
@@ -36,8 +35,8 @@ namespace AlarmBot.Promptly
 
         // onFailure - Function to call when the Topic ends unsuccessfully, passing the reason
         //  why the Topic failed. 
-        protected Func<IBotContext, V, Task> failure;
-        public Topic<S, V> OnFailure(Func<IBotContext, V, Task> failure)
+        protected Func<IBotContext, string, Task> failure;
+        public Topic<S, V> OnFailure(Func<IBotContext, string, Task> failure)
         {
             this.failure = failure;
             return this;

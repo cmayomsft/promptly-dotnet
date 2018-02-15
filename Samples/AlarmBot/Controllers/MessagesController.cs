@@ -21,11 +21,9 @@ namespace Primitives.Controllers
                 if (message.Text.ToLowerInvariant() == "add alarm") {
 
                     context.Reply("Adding an alarm...");
-                    return Task.CompletedTask;
                 }
 
                 showDefaultMessage(context);
-                return Task.CompletedTask;
             }
 
             return Task.CompletedTask;
