@@ -7,33 +7,24 @@ using System.Threading.Tasks;
 namespace Primitives.Controllers
 {
     [Route("api/[controller]")]
-    public class MessagesController : Controller
+    public class MessagesController : BotController
     {
-        private readonly Bot _bot;
+        public MessagesController(Bot bot) : base(bot) { }
 
-        public MessagesController(Bot bot)
+        protected override Task OnReceiveActivity(IBotContext context)
         {
-            _bot = bot;
-
-            _bot.OnReceive((context, nextDelegate) =>
+            if (context.Request.Type == ActivityTypes.Message)
             {
-                if (context.Request.Type == ActivityTypes.Message)
-                {
-                    var userMessage = context.Request.AsMessageActivity().Text;
+                var message = context.Request.AsMessageActivity().Text;
 
-                    var turnNumber = (int)(context.State.Conversation[@"turnNumber"] ?? 1);
-                    context.Reply($@"Turn: {turnNumber++} - You said '{userMessage}'!");
-                }
+                var turnNumber = (int)(context.State.Conversation["turnNumber"] ?? 1);
 
-                return Task.CompletedTask;
-            });
+                context.Reply($"Turn: {turnNumber} - You said '{ message }'!");
+
+                context.State.Conversation["turnNumber"] = ++turnNumber;
+            }
+
+            return Task.CompletedTask;
         }
-
-        [HttpPost]
-        public void HandleActivityFromUser([FromBody] Activity activity)
-        {
-            ((BotFrameworkAdapter)_bot.Adapter).Receive(null, activity);
-        }
-
     }
 }
