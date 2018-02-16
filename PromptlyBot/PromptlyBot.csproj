@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <PackageId>Promptly-Bot</PackageId>
+    <Company />
+    <Product />
+    <Authors>cincodemayo</Authors>
+    <Version>0.0.1</Version>
+  </PropertyGroup>
+
+</Project>
