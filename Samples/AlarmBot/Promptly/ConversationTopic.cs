@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Promptly
+﻿namespace Promptly
 {
-    public class ActiveTopicState
+    public abstract class ConversationTopic<TValue> : Topic<TValue>
     {
-        // TODO: What type should this be?
+        public Topic ActiveTopic { get; set; }
 
-    }
-    public class ConversationTopic
-    {
+        public bool HasActiveTopic => (ActiveTopic != null);
+
+        public void ClearActiveTopic()
+        {
+            ActiveTopic = null;
+        }
     }
 }
