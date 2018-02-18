@@ -1,6 +1,6 @@
 ﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
-using Promptly;
+using PromptlyBot;
 using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
@@ -16,7 +16,15 @@ namespace AlarmBot.Topics
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
 
-                    context.Reply("Adding an alarm...");
+                    ActiveTopic = new AddAlarmTopic();
+
+                    ActiveTopic.OnReceiveActivity(context);
+                    return Task.CompletedTask;
+                }
+
+                if (HasActiveTopic)
+                {
+                    ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
