@@ -26,7 +26,7 @@ namespace PromptlyBot
     public abstract class Topic<TValue> : Topic
     {
         protected new Action<IBotContext, TValue> _onSuccess;
-        public Topic OnSuccess(Action<IBotContext, TValue> success)
+        public Topic<TValue> OnSuccess(Action<IBotContext, TValue> success)
         {
             _onSuccess = success;
             return this;
