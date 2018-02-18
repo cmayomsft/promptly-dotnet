@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AlarmBot.Topics;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Schema;
@@ -11,53 +12,18 @@ namespace AlarmBot.Controllers
     {
         public MessagesController(Bot bot) : base(bot) { }
 
-        // TODO: Why is this IBotContext?
+        // TODO: Why is this IBotContext vs. BotContext?
+        // TODO: Why is this called OnReceiveActivity? Doesn't receive an Activity as an arg, different from Node OnReceive().
         protected override Task OnReceiveActivity(IBotContext context)
         {
-            if ((context.Request.Type == ActivityTypes.Message) && (context.Request.AsMessageActivity().Text.Length > 0))
+            if (context.State.Conversation["RooTopic"] == null)
             {
-                var message = context.Request.AsMessageActivity();
-
-                if (message.Text.ToLowerInvariant() == "add alarm") {
-
-                    context.Reply("Adding an alarm...");
-                }
-
-                showDefaultMessage(context);
+                context.State.Conversation["RooTopic"] = new RootTopic();
             }
+
+            ((RootTopic)context.State.Conversation["RooTopic"]).OnReceiveActivity(context);
 
             return Task.CompletedTask;
         }
-
-        private void showDefaultMessage(IBotContext context)
-        {
-            context.Reply("'Show Alarms', 'Add Alarm', 'Delete Alarm', 'Help'.");
-        }
     }
 }
-
-
-
-/*
-     * // If bot doesn't have state it needs, prompt for it.
-    if (context.State.User["name"] == null)
-    {
-        // On the first turn, prompt and update state that conversation is in a prompt.
-        if (context.State.Conversation["prompt"] != "name")
-        {
-            context.State.Conversation["prompt"] = "name";
-            context.Reply("What is your name?");
-            // On the subsequent turn, update state with reply and update state that prompt has completed. 
-        }
-        else
-        {
-            context.State.Conversation["prompt"] = "";
-            context.State.User["name"] = context.Request.AsMessageActivity().Text;
-            context.Reply($"Great, I'll call you '{ context.State.User["name"] }'!");
-        }
-    }
-    else
-    {
-        context.Reply($"{ context.State.User["name"]} said: '{ context.Request.AsMessageActivity().Text }'");
-    }
-*/
