@@ -9,11 +9,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{E38A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Primitives", "Samples\Primitives\Primitives.csproj", "{4614CE08-39DA-42D0-B934-667272716934}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AlarmBot", "Samples\AlarmBot\AlarmBot.csproj", "{E9D4987B-A791-484C-88E9-C02AC12965EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AlarmBot", "Samples\AlarmBot\AlarmBot.csproj", "{E9D4987B-A791-484C-88E9-C02AC12965EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SimpleTopics", "Samples\SimpleTopic\SimpleTopics.csproj", "{9D93DE35-EF67-4C70-B594-012882098ECE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SimpleTopics", "Samples\SimpleTopic\SimpleTopics.csproj", "{9D93DE35-EF67-4C70-B594-012882098ECE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PromptlyBot", "PromptlyBot\PromptlyBot.csproj", "{7FEF9335-56E8-47C9-B55F-427507F8A419}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PromptlyBot", "PromptlyBot\PromptlyBot.csproj", "{7FEF9335-56E8-47C9-B55F-427507F8A419}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
