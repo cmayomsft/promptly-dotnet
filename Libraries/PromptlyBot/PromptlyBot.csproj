@@ -8,6 +8,7 @@
     <Product />
     <Authors>cincodemayo</Authors>
     <Version>0.0.1</Version>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>
