@@ -1,10 +1,9 @@
-﻿using AlarmBot.Promptly.Validator;
-using Microsoft.Bot.Builder;
-using Promptly;
+﻿using Microsoft.Bot.Builder;
+using PromptlyBot.Validator;
 using System;
 using System.Threading.Tasks;
 
-namespace AlarmBot.Promptly
+namespace PromptlyBot
 {
     public class Prompt<TValue> : Topic<TValue>
     {
@@ -17,22 +16,22 @@ namespace AlarmBot.Promptly
             }
         }
 
-        private Func<IBotContext, string, Task> _onPrompt;
-        public Topic OnPrompt(Func<IBotContext, string, Task> onPrompt)
+        private Action<IBotContext, string> _onPrompt;
+        public Prompt<TValue> OnPrompt(Action<IBotContext, string> onPrompt)
         {
             _onPrompt = onPrompt;
             return this;
         }
 
         private int _maxTurns = 2;
-        public Topic MaxTurns(int maxTurns)
+        public Prompt<TValue> MaxTurns(int maxTurns)
         {
             _maxTurns = maxTurns;
             return this;
         }
 
         private Validator<TValue> _validator;
-        public Topic Validator(Validator<TValue> validator)
+        public Prompt<TValue> Validator(Validator<TValue> validator)
         {
             _validator = validator;
             return this;

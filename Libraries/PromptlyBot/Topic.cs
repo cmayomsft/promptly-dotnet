@@ -2,21 +2,21 @@
 using System;
 using System.Threading.Tasks;
 
-namespace Promptly
+namespace PromptlyBot
 {
     public abstract class Topic
     {
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        protected Func<IBotContext, Task> _onSuccess;
-        public Topic OnSuccess(Func<IBotContext, Task> success)
+        protected Action<IBotContext> _onSuccess;
+        public Topic OnSuccess(Action<IBotContext> success)
         {
             _onSuccess = success;
             return this;
         }
 
-        protected Func<IBotContext, string, Task> _onFailure;
-        public Topic OnFailure(Func<IBotContext, string, Task> failure)
+        protected Action<IBotContext, string> _onFailure;
+        public Topic OnFailure(Action<IBotContext, string> failure)
         {
             _onFailure = failure;
             return this;
@@ -25,8 +25,8 @@ namespace Promptly
 
     public abstract class Topic<TValue> : Topic
     {
-        protected new Func<IBotContext, TValue, Task> _onSuccess;
-        public Topic OnSuccess(Func<IBotContext, TValue, Task> success)
+        protected new Action<IBotContext, TValue> _onSuccess;
+        public Topic OnSuccess(Action<IBotContext, TValue> success)
         {
             _onSuccess = success;
             return this;

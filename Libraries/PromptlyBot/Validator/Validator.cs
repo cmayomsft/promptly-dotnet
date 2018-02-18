@@ -1,6 +1,6 @@
 ﻿using Microsoft.Bot.Builder;
 
-namespace AlarmBot.Promptly.Validator
+namespace PromptlyBot.Validator
 {
     public class ValidatorResult<TValue>
     {

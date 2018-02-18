@@ -1,4 +1,4 @@
-﻿namespace Promptly
+﻿namespace PromptlyBot
 {
     public abstract class ConversationTopic : Topic
     {
