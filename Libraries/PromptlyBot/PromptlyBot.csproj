@@ -10,4 +10,8 @@
     <Version>0.0.1</Version>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Bot.Builder.BotFramework" Version="4.0.0-alpha201802123" />
+  </ItemGroup>
+
 </Project>
