@@ -8,36 +8,73 @@ namespace AlarmBot.Promptly
 {
     public class Prompt<TValue> : Topic<TValue>
     {
-        public int Turns { get; set; } = 0;
+        private int _turns = 0;
+        public int Turns
+        {
+            get
+            {
+                return _turns;
+            }
+        }
 
-        private Func<IBotContext, string, Task> _OnPrompt;
+        private Func<IBotContext, string, Task> _onPrompt;
         public Topic OnPrompt(Func<IBotContext, string, Task> onPrompt)
         {
-            _OnPrompt = onPrompt;
+            _onPrompt = onPrompt;
             return this;
         }
 
-        private int _MaxTurns = 2;
+        private int _maxTurns = 2;
         public Topic MaxTurns(int maxTurns)
         {
-            _MaxTurns = maxTurns;
+            _maxTurns = maxTurns;
             return this;
         }
 
-        private Validator<TValue> _Validator;
+        private Validator<TValue> _validator;
         public Topic Validator(Validator<TValue> validator)
         {
-            _Validator = validator;
+            _validator = validator;
             return this;
         }
 
         public override Task OnReceiveActivity(IBotContext context)
         {
-            if (this.Turns == 0)
+            // If this is the initial turn (turn 0), send the initial prompt.
+            if (_turns == 0)
             {
-                this.OnPrompt(context);
-                return
+                _onPrompt(context, null);
+                return Task.CompletedTask;
             }
+
+            // For all subsequent turns...
+
+            // Validate the message/reply from the last turn.
+            var validationResult = _validator.Validate(context);
+
+            // If the message/reply wasn't a valid response to the prompt...
+            if (validationResult.Reason != null)
+            {
+                // Increase the turn count.
+                _turns += 1;
+
+                // If max turns has been reached, the prompt has failed with too many attempts.
+                if (_turns == _maxTurns)
+                {
+                    validationResult.Reason = "toomanyattempts";
+
+                    _onFailure(context, validationResult.Reason);
+                    return Task.CompletedTask;
+                }
+
+                // Re-prompt, providing the validation reason from last turn.
+                _onPrompt(context, validationResult.Reason);
+                return Task.CompletedTask;
+            }
+
+            // Prompt was successful, so pass value (result) of the Prompt.
+            _onSuccess(context, validationResult.Value);
+            return Task.CompletedTask;
         }
     }
 }
