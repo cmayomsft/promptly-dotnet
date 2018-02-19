@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class RootTopic : ConversationTopic
+    public class RootTopic : ConversationTopic<string>
     {
         public override Task OnReceiveActivity(IBotContext context)
         {
@@ -13,9 +13,9 @@ namespace AlarmBot.Topics
             {
                 var message = context.Request.AsMessageActivity();
 
+                // Start Here: Wire up a simple Topic and Topic<> with onSuccess/onFailure.
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
-
                     ActiveTopic = new AddAlarmTopic();
 
                     ActiveTopic.OnReceiveActivity(context);

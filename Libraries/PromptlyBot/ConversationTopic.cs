@@ -2,7 +2,7 @@
 {
     public abstract class ConversationTopic<TValue> : Topic<TValue>
     {
-        public Topic ActiveTopic { get; set; }
+        public Topic<TValue> ActiveTopic { get; set; }
 
         public bool HasActiveTopic => (ActiveTopic != null);
 

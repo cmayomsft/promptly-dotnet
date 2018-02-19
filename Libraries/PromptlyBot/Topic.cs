@@ -9,17 +9,26 @@ namespace PromptlyBot
         public abstract Task OnReceiveActivity(IBotContext context);
 
         protected Action<IBotContext, TValue> _onSuccess;
-        public Topic<TValue> OnSuccess(Action<IBotContext, TValue> success)
+        public Action<IBotContext, TValue> OnSuccess
         {
-            _onSuccess = success;
-            return this;
+            set { _onSuccess = value; }
+            get { return _onSuccess; }
         }
 
         protected Action<IBotContext, string> _onFailure;
-        public Topic<TValue> OnFailure(Action<IBotContext, string> failure)
+        public Action<IBotContext, string> OnFailure
         {
-            _onFailure = failure;
-            return this;
+            set { _onFailure = value; }
+            get { return _onFailure; }
+        }
+    }
+
+    public static class TopicTValueExtension
+    {
+        public static T OnSuccess<T, V>(this T topic, Action<IBotContext, V> onSuccess) where T: Topic<V>
+        {
+            topic.OnSuccess = onSuccess;
+            return topic;
         }
     }
 }
