@@ -4,6 +4,7 @@ namespace PromptlyBot.Validator
 {
     public class ValidatorResult<TValue>
     {
+        public ValidatorResult() { }
         public TValue Value { get; set; }
         public string Reason { get; set; }
     }

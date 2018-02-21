@@ -9,11 +9,6 @@ namespace PromptlyBot
         public abstract Task OnReceiveActivity(IBotContext context);
 
         internal Action<IBotContext> _onSuccess;
-        /*public Action<IBotContext, TValue> OnSuccess
-        {
-            set { _onSuccess = value; }
-            get { return _onSuccess; }
-        }*/
 
         protected Action<IBotContext, string> _onFailure;
         public Action<IBotContext, string> OnFailure
@@ -34,13 +29,7 @@ namespace PromptlyBot
 
     public abstract class Topic<TValue> : Topic
     { 
-
         new internal Action<IBotContext, TValue> _onSuccess;
-        /*public Action<IBotContext, TValue> OnSuccess
-        {
-            set { _onSuccess = value; }
-            get { return _onSuccess; }
-        }*/
     }
 
     public static class TopicTValueExtension
