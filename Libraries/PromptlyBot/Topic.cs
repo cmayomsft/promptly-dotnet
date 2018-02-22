@@ -42,7 +42,7 @@ namespace PromptlyBot
         public abstract Task OnReceiveActivity(IBotContext context);
 
         internal Action<IBotContext, TValue> _onSuccess;
-
+        // TODO: Remove private set, unless needed for DataContract.
         [DataMember]
         public Action<IBotContext, TValue> OnSuccess { get => _onSuccess; private set => _onSuccess = value; }
 
