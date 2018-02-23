@@ -9,6 +9,7 @@ namespace AlarmBot.Topics
     {
         public RootTopic(IBotContext context) : base(context)
         {
+
         }
 
         private void _simpleTopicCallBack(IBotContext context)
@@ -24,9 +25,11 @@ namespace AlarmBot.Topics
                 if (message.Text.ToLowerInvariant() == "simple")
                 {
                     // Start Here: Won't serialize delegates, which worked in V3 w/ Serializable.
-                    var simpleTopic = new SimpleTopic();
-                    simpleTopic.OnSuccess = _simpleTopicCallBack;
-                    simpleTopic.OnFailure = (ctx, reason) => { };
+                    var simpleTopic = new SimpleTopic
+                    {
+                        OnSuccess = _simpleTopicCallBack,
+                        OnFailure = (ctx, reason) => { }
+                    };
 
                     this.ActiveTopic = simpleTopic;
 
