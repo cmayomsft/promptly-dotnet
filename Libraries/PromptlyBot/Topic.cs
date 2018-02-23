@@ -37,7 +37,8 @@ namespace PromptlyBot
         }
     }*/
 
-    [DataContract]
+    [Serializable]
+    //[DataContract]
     public abstract class Topic<TValue> : Topic
     {
         private Action<IBotContext, TValue> _onSuccess;
