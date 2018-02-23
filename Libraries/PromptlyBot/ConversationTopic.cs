@@ -14,29 +14,22 @@ namespace PromptlyBot
         public ActiveTopicState ActiveTopic;
     }
 
-    public delegate Topic<object> SubTopicFunction(params object[] args);
+    public delegate Topic<object> SubTopicFunction();
 
     //[DataContract()]
     public abstract class ConversationTopic<TState> : Topic<TState> where TState : ConversationTopicState
     {
         public ConversationTopic(TState state) : base(state) { }
 
-        private Dictionary<string, SubTopicFunction> _subTopics;
-        public Dictionary<string, SubTopicFunction> SubTopics { get => _subTopics; }
+        private Dictionary<string, Func<Topic<object>>> _subTopics;
+        public Dictionary<string, Func<Topic<object>>> SubTopics { get => _subTopics; }
 
         private Topic<object> _activeTopic;
         //[DataMember]
         //public Topic<object> ActiveTopic { get => _activeTopic; set => _activeTopic = value; }
-        public void SetActiveTopic(string subTopicKey, params object[] args)
+        public void SetActiveTopic(string subTopicKey)
         {
-            if (args != null)
-            {
-                this._activeTopic = this._subTopics[subTopicKey](args);
-            }
-            else
-            {
-                this._activeTopic = this._subTopics[subTopicKey]();
-            }
+            this._activeTopic = this._subTopics[subTopicKey]();
 
             this.State.ActiveTopic = new ActiveTopicState { Key = subTopicKey, State = this._activeTopic.State };
         }
