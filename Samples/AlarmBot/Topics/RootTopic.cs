@@ -21,8 +21,8 @@ namespace AlarmBot.Topics
                 {
                     // Start Here: Won't serialize delegates, which worked in V3 w/ Serializable.
                     var simpleTopic = new SimpleTopic();
-                    simpleTopic.OnSuccess = _simpleTopicCallBack;
-                    simpleTopic.OnFailure = (ctx, reason) => { };
+                    //simpleTopic.OnSuccess = _simpleTopicCallBack;
+                    //simpleTopic.OnFailure = (ctx, reason) => { };
 
                     this.ActiveTopic = simpleTopic;
 
