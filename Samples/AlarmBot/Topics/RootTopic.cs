@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class RootTopic : ConversationTopic<string>
+    public class RootTopic : ConversationTopic
     {
         public override Task OnReceiveActivity(IBotContext context)
         {
@@ -13,12 +13,46 @@ namespace AlarmBot.Topics
             {
                 var message = context.Request.AsMessageActivity();
 
-                // Start Here: Wire up a simple Topic and Topic<> with onSuccess/onFailure.
+                if (message.Text.ToLowerInvariant() == "simple")
+                {
+                    var simpleTopic = new SimpleTopic()
+                        .SetOnSuccess(((ctx) => { }))
+                        .SetOnFailure((ctx, reason) => { });
+
+                    return Task.CompletedTask;
+                }
+
+                if (message.Text.ToLowerInvariant() == "simple value")
+                {
+                    var simpleValueTopic = new SimpleValueTopic()
+                        .SetOnSuccess((ctx, value) => { });
+
+                    return Task.CompletedTask;
+                }
+
+                if (message.Text.ToLowerInvariant() == "simple conversation topic")
+                {
+                    var simpleTopic = new SimpleConversationTopic()
+                        .SetOnSuccess(((ctx) => { }))
+                        .SetOnFailure((ctx, reason) => { });
+
+                    return Task.CompletedTask;
+                }
+
+                if (message.Text.ToLowerInvariant() == "simple value conversation topic")
+                {
+                    var simpleTopic = new SimpleConversationTopic()
+                        .SetOnSuccess(((ctx, value) => { }))
+                        .SetOnFailure((ctx, reason) => { });
+
+                    return Task.CompletedTask;
+                }
+
+
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
-                    ActiveTopic = new AddAlarmTopic();
+                    var addAlarmTopic = new AddAlarmTopic();
 
-                    ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
