@@ -7,8 +7,16 @@ namespace PromptlyBot
 {
     //[DataContract()]
     //[Serializable]
-    public abstract class Topic
+    public abstract class Topic<TState>
     {
+        private TState _state;
+        public TState State { get => _state; set => _state = value; }
+
+        public Topic(TState state)
+        {
+            _state = state;
+        }
+
         public abstract Task OnReceiveActivity(IBotContext context);
 
         private Action<IBotContext> _onSuccess;
@@ -39,7 +47,7 @@ namespace PromptlyBot
 
     //[Serializable]
     //[DataContract]
-    public abstract class Topic<TValue> : Topic
+    public abstract class Topic<TState, TValue> : Topic<TState>
     {
         private Action<IBotContext, TValue> _onSuccess;
         // TODO: Remove private set, unless needed for DataContract.
