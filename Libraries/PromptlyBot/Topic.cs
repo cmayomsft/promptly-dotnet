@@ -49,6 +49,8 @@ namespace PromptlyBot
     //[DataContract]
     public abstract class Topic<TState, TValue> : Topic<TState>
     {
+        public Topic(TState state) : base(state) { }
+
         private Action<IBotContext, TValue> _onSuccess;
         // TODO: Remove private set, unless needed for DataContract.
         [DataMember]
