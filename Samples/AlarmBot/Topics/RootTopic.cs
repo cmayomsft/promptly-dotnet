@@ -7,6 +7,10 @@ namespace AlarmBot.Topics
 {
     public class RootTopic : ConversationTopic
     {
+        private void _simpleTopicCallBack(IBotContext context)
+        {
+        }
+
         public override Task OnReceiveActivity(IBotContext context)
         {
             if ((context.Request.Type == ActivityTypes.Message) && (context.Request.AsMessageActivity().Text.Length > 0))
@@ -15,8 +19,9 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "simple")
                 {
+                    // Start Here: Won't serialize delegates, which worked in V3 w/ Serializable.
                     var simpleTopic = new SimpleTopic();
-                    simpleTopic.OnSuccess = (ctx) => { };
+                    simpleTopic.OnSuccess = _simpleTopicCallBack;
                     simpleTopic.OnFailure = (ctx, reason) => { };
 
                     this.ActiveTopic = simpleTopic;

@@ -5,19 +5,20 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
-    [DataContract()]
+    //[DataContract()]
+    [Serializable]
     public abstract class Topic
     {
         public abstract Task OnReceiveActivity(IBotContext context);
 
         private Action<IBotContext> _onSuccess;
         // TODO: Remove private set, unless needed for DataContract.
-        [DataMember]
+        //[DataMember]
         public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
 
         private Action<IBotContext, string> _onFailure;
-        [DataMember]
+        //[DataMember]
         public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
     }
 
