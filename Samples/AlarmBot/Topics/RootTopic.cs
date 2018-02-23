@@ -5,8 +5,12 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class RootTopic : ConversationTopic
+    public class RootTopic : TopicsRoot
     {
+        public RootTopic(IBotContext context) : base(context)
+        {
+        }
+
         private void _simpleTopicCallBack(IBotContext context)
         {
         }
@@ -30,7 +34,7 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
-                if (message.Text.ToLowerInvariant() == "simple value")
+                /*if (message.Text.ToLowerInvariant() == "simple value")
                 {
                     var simpleValueTopic = new SimpleValueTopic();
 
@@ -41,9 +45,9 @@ namespace AlarmBot.Topics
 
                     simpleValueTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
-                }
+                }*/
 
-                if (message.Text.ToLowerInvariant() == "simple conversation topic")
+                /*if (message.Text.ToLowerInvariant() == "simple conversation topic")
                 {
                     var simpleConversationTopic = new SimpleConversationTopic();
                     simpleConversationTopic.OnSuccess = (ctx) => { };
@@ -53,9 +57,9 @@ namespace AlarmBot.Topics
 
                     simpleConversationTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
-                }
+                }*/
 
-                if (message.Text.ToLowerInvariant() == "simple value conversation topic")
+                /*if (message.Text.ToLowerInvariant() == "simple value conversation topic")
                 {
                     var simpleValueConversationTopic = new SimpleValueConversationTopic();
                     simpleValueConversationTopic.OnSuccess = (ctx, value) => { };
@@ -65,10 +69,10 @@ namespace AlarmBot.Topics
 
                     simpleValueConversationTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
-                }
+                }*/
 
 
-                if (message.Text.ToLowerInvariant() == "add alarm")
+                /*if (message.Text.ToLowerInvariant() == "add alarm")
                 {
                     var addAlarmTopic = new AddAlarmTopic();
                     addAlarmTopic.OnSuccess = (ctx, value) => { };
@@ -78,7 +82,7 @@ namespace AlarmBot.Topics
 
                     addAlarmTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
-                }
+                }*/
 
                 if (HasActiveTopic)
                 {

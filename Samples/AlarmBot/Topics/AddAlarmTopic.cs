@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class AddAlarmTopic : ConversationTopic<Alarm>
+    /*public class AddAlarmTopic : ConversationTopic<Alarm>
     {
         private Alarm _alarm;
 
@@ -26,9 +26,9 @@ namespace AlarmBot.Topics
 
             return Task.CompletedTask;
         }
-    }
+    }*/
 
-    public class AlarmTitleValidator : Validator<string>
+    /*public class AlarmTitleValidator : Validator<string>
     {
         public override ValidatorResult<string> Validate(IBotContext context)
         {
@@ -47,6 +47,6 @@ namespace AlarmBot.Topics
                 };
             }
         }
-    }
+    }*/
 
 }

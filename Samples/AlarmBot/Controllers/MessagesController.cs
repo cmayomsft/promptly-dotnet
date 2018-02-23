@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Schema;
+using PromptlyBot;
 using System.Threading.Tasks;
 
 namespace AlarmBot.Controllers
@@ -16,12 +17,9 @@ namespace AlarmBot.Controllers
         // TODO: Why is this called OnReceiveActivity? Doesn't receive an Activity as an arg, different from Node OnReceive().
         protected override Task OnReceiveActivity(IBotContext context)
         {
-            if (context.State.Conversation["RooTopic"] == null)
-            {
-                context.State.Conversation["RooTopic"] = new RootTopic();
-            }
+            var rootTopic = new RootTopic(context);
 
-            ((RootTopic)context.State.Conversation["RooTopic"]).OnReceiveActivity(context);
+            rootTopic.OnReceiveActivity(context);
 
             return Task.CompletedTask;
         }
