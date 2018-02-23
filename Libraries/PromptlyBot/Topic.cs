@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace PromptlyBot
 {
     //[DataContract()]
-    [Serializable]
+    //[Serializable]
     public abstract class Topic
     {
         public abstract Task OnReceiveActivity(IBotContext context);
@@ -37,7 +37,7 @@ namespace PromptlyBot
         }
     }*/
 
-    [Serializable]
+    //[Serializable]
     //[DataContract]
     public abstract class Topic<TValue> : Topic
     {
