@@ -62,7 +62,7 @@ namespace PromptlyBot
                 {
                     validationResult.Reason = "toomanyattempts";
 
-                    _onFailure(context, validationResult.Reason);
+                    OnFailure(context, validationResult.Reason);
                     return Task.CompletedTask;
                 }
 
@@ -72,7 +72,7 @@ namespace PromptlyBot
             }
 
             // Prompt was successful, so pass value (result) of the Prompt.
-            _onSuccess(context, validationResult.Value);
+            this.OnSuccess(context, validationResult.Value);
             return Task.CompletedTask;
         }
     }

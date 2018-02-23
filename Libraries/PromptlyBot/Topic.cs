@@ -10,18 +10,18 @@ namespace PromptlyBot
     {
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        internal Action<IBotContext> _onSuccess;
+        private Action<IBotContext> _onSuccess;
         // TODO: Remove private set, unless needed for DataContract.
         [DataMember]
-        public Action<IBotContext> OnSuccess { get => _onSuccess; private set => _onSuccess = value; }
+        public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
 
-        internal Action<IBotContext, string> _onFailure;
+        private Action<IBotContext, string> _onFailure;
         [DataMember]
-        public Action<IBotContext, string> OnFailure { get => _onFailure; private set => _onFailure = value; }
+        public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
     }
 
-    public static class TopicExtension
+    /*public static class TopicExtension
     {
         public static T SetOnSuccess<T>(this T topic, Action<IBotContext> onSuccess) where T : Topic
         {
@@ -34,24 +34,18 @@ namespace PromptlyBot
             topic._onFailure = onFailure;
             return topic;
         }
-    }
+    }*/
 
     [DataContract]
-    public abstract class Topic<TValue>
+    public abstract class Topic<TValue> : Topic
     {
-        public abstract Task OnReceiveActivity(IBotContext context);
-
-        internal Action<IBotContext, TValue> _onSuccess;
+        private Action<IBotContext, TValue> _onSuccess;
         // TODO: Remove private set, unless needed for DataContract.
         [DataMember]
-        public Action<IBotContext, TValue> OnSuccess { get => _onSuccess; private set => _onSuccess = value; }
-
-        internal Action<IBotContext, string> _onFailure;
-        [DataMember]
-        public Action<IBotContext, string> OnFailure { get => _onFailure; private set => _onFailure = value; }
+        public new Action<IBotContext, TValue> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
     }
 
-    public static class TopicTValueExtension
+    /*public static class TopicTValueExtension
     {
         public static T SetOnSuccess<T, V>(this T topic, Action<IBotContext, V> onSuccess) where T: Topic<V>
         {
@@ -64,5 +58,5 @@ namespace PromptlyBot
             topic._onFailure = onFailure;
             return topic;
         }
-    }
+    }*/
 }

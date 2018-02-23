@@ -15,36 +15,50 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "simple")
                 {
-                    var simpleTopic = new SimpleTopic()
-                        .SetOnSuccess(((ctx) => { }))
-                        .SetOnFailure((ctx, reason) => { });
+                    var simpleTopic = new SimpleTopic();
+                    simpleTopic.OnSuccess = (ctx) => { };
+                    simpleTopic.OnFailure = (ctx, reason) => { };
 
+                    this.ActiveTopic = simpleTopic;
+
+                    simpleTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
                 if (message.Text.ToLowerInvariant() == "simple value")
                 {
-                    var simpleValueTopic = new SimpleValueTopic()
-                        .SetOnSuccess((ctx, value) => { });
+                    var simpleValueTopic = new SimpleValueTopic();
 
+                    simpleValueTopic.OnSuccess = (ctx, value) => { };
+                    simpleValueTopic.OnFailure = (ctx, reason) => { };
+
+                    this.ActiveTopic = simpleValueTopic;
+
+                    simpleValueTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
                 if (message.Text.ToLowerInvariant() == "simple conversation topic")
                 {
-                    var simpleTopic = new SimpleConversationTopic()
-                        .SetOnSuccess(((ctx) => { }))
-                        .SetOnFailure((ctx, reason) => { });
+                    var simpleConversationTopic = new SimpleConversationTopic();
+                    simpleConversationTopic.OnSuccess = (ctx) => { };
+                    simpleConversationTopic.OnFailure = (ctx, reason) => { };
 
+                    this.ActiveTopic = simpleConversationTopic;
+
+                    simpleConversationTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
                 if (message.Text.ToLowerInvariant() == "simple value conversation topic")
                 {
-                    var simpleTopic = new SimpleConversationTopic()
-                        .SetOnSuccess(((ctx, value) => { }))
-                        .SetOnFailure((ctx, reason) => { });
+                    var simpleValueConversationTopic = new SimpleValueConversationTopic();
+                    simpleValueConversationTopic.OnSuccess = (ctx, value) => { };
+                    simpleValueConversationTopic.OnFailure = (ctx, reason) => { };
 
+                    this.ActiveTopic = simpleValueConversationTopic;
+
+                    simpleValueConversationTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
@@ -52,7 +66,12 @@ namespace AlarmBot.Topics
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
                     var addAlarmTopic = new AddAlarmTopic();
+                    addAlarmTopic.OnSuccess = (ctx, value) => { };
+                    addAlarmTopic.OnFailure = (ctx, reason) => { };
 
+                    this.ActiveTopic = addAlarmTopic;
+
+                    addAlarmTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 

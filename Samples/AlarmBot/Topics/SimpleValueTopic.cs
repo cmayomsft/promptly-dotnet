@@ -8,7 +8,6 @@ namespace AlarmBot.Topics
     {
         public override Task OnReceiveActivity(IBotContext context)
         {
-            this.SetOnSuccess((ctx, value) => { });
             context.Reply("SimpleValueTopic.OnReceiveActivity()");
             return Task.CompletedTask;
         }
