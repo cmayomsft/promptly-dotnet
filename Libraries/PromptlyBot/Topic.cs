@@ -14,11 +14,6 @@ namespace PromptlyBot
         Action<IBotContext, string> OnFailure { get; set; }
     }
 
-    /*public interface ITopicValue<TValue> : ITopic
-    {
-        new Action<IBotContext, TValue> OnSuccess { get; set; }
-    }*/
-
     public interface IState
     {
         object State { get; set; }
