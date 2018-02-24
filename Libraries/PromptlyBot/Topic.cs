@@ -5,23 +5,20 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
-    public interface ITopic<TValue>
+    public interface ITopic
     {
+        object State { get; set; }
+
         Task OnReceiveActivity(IBotContext context);
 
-        Action<IBotContext, TValue> OnSuccess { get; set; }
+        Action<IBotContext> OnSuccess { get; set; }
 
         Action<IBotContext, string> OnFailure { get; set; }
     }
 
-    public interface IState
+    public abstract class Topic<TState> : ITopic
     {
-        object State { get; set; }
-    }
-
-    public abstract class Topic<TState, TValue> : ITopic<TValue>, IState
-    {
-        private TState _state;
+        protected TState _state;
         public object State { get => _state; set => _state = (TState)value; }
 
         public Topic(TState state)
@@ -31,8 +28,8 @@ namespace PromptlyBot
 
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        private Action<IBotContext, TValue> _onSuccess;
-        public Action<IBotContext, TValue> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
+        private Action<IBotContext> _onSuccess;
+        public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
 
         private Action<IBotContext, string> _onFailure;
