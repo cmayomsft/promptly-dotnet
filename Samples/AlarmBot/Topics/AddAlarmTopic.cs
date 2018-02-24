@@ -6,27 +6,20 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    /*public class AddAlarmTopic : ConversationTopic<Alarm>
+    public class AddAlarmTopicState : ConversationTopicState
     {
-        private Alarm _alarm;
+        public Alarm alarm;
+    }
 
+    public class AddAlarmTopic : ConversationTopic<AddAlarmTopicState, Alarm>
+    {
         public override Task OnReceiveActivity(IBotContext context)
         {
-            if(HasActiveTopic)
-            {
-                this.ActiveTopic.OnReceiveActivity(context);
-                return Task.CompletedTask;
-            }
-
-            if (_alarm.Title == null)
-            {
-
-
-            }
+            this.OnSuccess(context, new Alarm { Title = "Chris", Time = "1 PM"});
 
             return Task.CompletedTask;
         }
-    }*/
+    }
 
     /*public class AlarmTitleValidator : Validator<string>
     {

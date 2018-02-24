@@ -44,6 +44,24 @@ namespace AlarmBot.Topics
 
                 };
             });
+
+            this.SubTopics.Add("addAlarmTopic", () =>
+            {
+                return new AddAlarmTopic
+                {
+                    OnSuccess = (ctx, value) =>
+                    {
+                        context.Reply($"AddAlarmTopic.OnSuccess() - { value.Title + " - " + value.Time }");
+                        this.ClearActiveTopic();
+                    },
+                    OnFailure = (ctx, reason) =>
+                    {
+                        this.ClearActiveTopic();
+                        context.Reply($"AddAlarmTopic.OnFailure() - { reason }");
+                    },
+
+                };
+            });
         }
 
         public override Task OnReceiveActivity(IBotContext context)
@@ -91,17 +109,12 @@ namespace AlarmBot.Topics
                 }*/
 
 
-                /*if (message.Text.ToLowerInvariant() == "add alarm")
+                if (message.Text.ToLowerInvariant() == "add alarm")
                 {
-                    var addAlarmTopic = new AddAlarmTopic();
-                    addAlarmTopic.OnSuccess = (ctx, value) => { };
-                    addAlarmTopic.OnFailure = (ctx, reason) => { };
-
-                    this.ActiveTopic = addAlarmTopic;
-
-                    addAlarmTopic.OnReceiveActivity(context);
+                    this.SetActiveTopic("addAlarmTopic");
+                    this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
-                }*/
+                }
 
                 if (HasActiveTopic)
                 {

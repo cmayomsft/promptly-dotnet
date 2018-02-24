@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Bot.Builder;
+using System;
 using System.Collections.Generic;
 
 namespace PromptlyBot
@@ -55,7 +56,8 @@ namespace PromptlyBot
 
     public abstract class ConversationTopic<TState, TValue> : ConversationTopic<TState> where TState : ConversationTopicState, new()
     {
-
+        private Action<IBotContext, TValue> _onSuccessValue;
+        public new Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
     }
 
     /*public static class ConversationTopicExtension
