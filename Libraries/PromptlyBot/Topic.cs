@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
-    public delegate void OnSuccessValueDelegate(IBotContext context);
-
     public interface ITopic
     {
         object State { get; set; }
@@ -14,16 +12,15 @@ namespace PromptlyBot
         Task OnReceiveActivity(IBotContext context);
 
         Action<IBotContext> OnSuccess { get; set; }
-        // This works, but the value comes back as an object[], so you'd have to cast. Not idea.
-        OnSuccessValueDelegate OnSuccessValue { get; set; }
-
+ 
         Action<IBotContext, string> OnFailure { get; set; }
     }
 
-    public abstract class Topic<TState> : ITopic where TState : new()
+    public abstract class Topic<TState, TValue> : ITopic where TState : new()
     {
         protected TState _state;
-        public object State { get => _state; set => _state = (TState)value; }
+        object ITopic.State { get => _state; set => State = (TState)value; }
+        public TState State { get => _state; set => _state = value; }
 
         public Topic()
         {
@@ -32,15 +29,14 @@ namespace PromptlyBot
 
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        private Action<IBotContext> _onSuccess;
-        public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
+        private Action<IBotContext, TValue> _onSuccessValue;
+        public Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
 
+        private Action<IBotContext> _onSuccess;
+        Action<IBotContext> ITopic.OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
         private Action<IBotContext, string> _onFailure;
         public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
-
-        private OnSuccessValueDelegate _onSuccessValue;
-        public OnSuccessValueDelegate OnSuccessValue { get => _onSuccessValue; set => _onSuccessValue = value; }
     }
 
     /*public static class TopicExtension
