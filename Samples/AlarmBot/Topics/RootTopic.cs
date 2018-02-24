@@ -15,9 +15,8 @@ namespace AlarmBot.Topics
                     {
                         OnSuccess = (ctx) =>
                             {
-                                context.Reply("SimpleTopic.OnSuccess()");
+                                context.Reply($"SimpleTopic.OnSuccess() - { ((SimpleTopicState)this.ActiveTopic.State).turns }");
                                 this.ClearActiveTopic();
-                                
                             },
                         OnFailure = (ctx, reason) =>
                             {
