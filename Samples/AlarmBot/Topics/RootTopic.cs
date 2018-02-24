@@ -7,9 +7,13 @@ namespace AlarmBot.Topics
 {
     public class RootTopic : TopicsRoot
     {
+        private const string SIMPLE_TOPIC = "simpleTopic";
+        private const string SIMPLE_VALUE_TOPIC = "simpleValueTopic";
+        private const string ADD_ALARM_TOPIC = "addAlarmTopic";
+
         public RootTopic(IBotContext context) : base(context)
         {
-            this.SubTopics.Add("simpleTopic", () =>
+            this.SubTopics.Add(SIMPLE_TOPIC, () =>
                 {
                     return new SimpleTopic
                     {
@@ -27,7 +31,7 @@ namespace AlarmBot.Topics
                     };
                 });
 
-            this.SubTopics.Add("simpleValueTopic", () =>
+            this.SubTopics.Add(SIMPLE_VALUE_TOPIC, () =>
             {
                 return new SimpleValueTopic
                 {
@@ -45,7 +49,7 @@ namespace AlarmBot.Topics
                 };
             });
 
-            this.SubTopics.Add("addAlarmTopic", () =>
+            this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
             {
                 return new AddAlarmTopic
                 {
@@ -72,14 +76,14 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "simple")
                 {
-                    this.SetActiveTopic("simpleTopic");
+                    this.SetActiveTopic(SIMPLE_TOPIC);
                     this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
                 if (message.Text.ToLowerInvariant() == "simple value")
                 {
-                    this.SetActiveTopic("simpleValueTopic");
+                    this.SetActiveTopic(SIMPLE_VALUE_TOPIC);
                     this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
@@ -111,7 +115,7 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
-                    this.SetActiveTopic("addAlarmTopic");
+                    this.SetActiveTopic(ADD_ALARM_TOPIC);
                     this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
