@@ -13,9 +13,22 @@ namespace AlarmBot.Topics
 
     public class AddAlarmTopic : ConversationTopic<AddAlarmTopicState, Alarm>
     {
+        public AddAlarmTopic() : base()
+        {
+            this.SubTopics.Add("titlePrompt", () =>
+            {
+                return new Prompt<string>
+                {
+                    on
+                    
+               
+                };
+            });
+        }
+
         public override Task OnReceiveActivity(IBotContext context)
         {
-            this.OnSuccess(context, new Alarm { Title = "Chris", Time = "1 PM"});
+            
 
             return Task.CompletedTask;
         }
