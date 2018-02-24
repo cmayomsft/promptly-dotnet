@@ -18,7 +18,7 @@ namespace PromptlyBot
     {
         public ConversationTopic(TState state) : base(state) { }
 
-        private Dictionary<string, Func<ITopic>> _subTopics;
+        private Dictionary<string, Func<ITopic>> _subTopics = new Dictionary<string, Func<ITopic>>();
         public Dictionary<string, Func<ITopic>> SubTopics { get => _subTopics; }
 
         private ITopic _activeTopic;
@@ -50,7 +50,7 @@ namespace PromptlyBot
         }
 
 
-        public bool HasActiveTopic => (_activeTopic != null);
+        public bool HasActiveTopic => (this._state.ActiveTopic != null);
 
         public void ClearActiveTopic() => _activeTopic = null;
     }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
-    public class Prompt<TValue> : Topic<TValue>
+    /*public class Prompt<TValue> : Topic<TValue>
     {
         private int _turns = 0;
         public int Turns
@@ -75,5 +75,5 @@ namespace PromptlyBot
             this.OnSuccess(context, validationResult.Value);
             return Task.CompletedTask;
         }
-    }
+    }*/
 }
