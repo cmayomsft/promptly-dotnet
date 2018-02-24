@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    //[Serializable]
     public class SimpleTopicState
     {
         public string name;

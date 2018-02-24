@@ -9,11 +9,7 @@ namespace AlarmBot.Topics
     {
         public RootTopic(IBotContext context) : base(context)
         {
-
-        }
-
-        private void _simpleTopicCallBack(IBotContext context)
-        {
+            this.SubTopics.Add("simpleTopic", () => new SimpleTopic());
         }
 
         public override Task OnReceiveActivity(IBotContext context)
@@ -27,11 +23,11 @@ namespace AlarmBot.Topics
                     // Start Here: Won't serialize delegates, which worked in V3 w/ Serializable.
                     var simpleTopic = new SimpleTopic
                     {
-                        OnSuccess = _simpleTopicCallBack,
+                        OnSuccess = (ctx) => { },
                         OnFailure = (ctx, reason) => { }
                     };
 
-                    this.ActiveTopic = simpleTopic;
+                    this.SetActiveTopic(simpleTopic)
 
                     simpleTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
