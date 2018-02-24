@@ -81,13 +81,13 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
-                showDefaultMessage(context);
+                ShowDefaultMessage(context);
             }
 
             return Task.CompletedTask;
         }
 
-        private void showDefaultMessage(IBotContext context)
+        private void ShowDefaultMessage(IBotContext context)
         {
             context.Reply("'Show Alarms', 'Add Alarm', 'Delete Alarm', 'Help'.");
         }

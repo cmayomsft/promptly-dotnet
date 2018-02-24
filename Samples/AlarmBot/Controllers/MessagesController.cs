@@ -13,13 +13,14 @@ namespace AlarmBot.Controllers
     {
         public MessagesController(Bot bot) : base(bot) { }
 
-        // TODO: Why is this IBotContext vs. BotContext?
-        // TODO: Why is this called OnReceiveActivity? Doesn't receive an Activity as an arg, different from Node OnReceive().
         protected override Task OnReceiveActivity(IBotContext context)
         {
-            var rootTopic = new RootTopic(context);
+            if (context.Request.Type == ActivityTypes.Message)
+            {
+                var rootTopic = new RootTopic(context);
 
-            rootTopic.OnReceiveActivity(context);
+                rootTopic.OnReceiveActivity(context);
+            }
 
             return Task.CompletedTask;
         }
