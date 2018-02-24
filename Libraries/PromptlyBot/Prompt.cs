@@ -5,42 +5,26 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
-    /*public class Prompt<TValue> : Topic<TValue>
+    public class PromptState
     {
-        private int _turns = 0;
-        public int Turns
-        {
-            get
-            {
-                return _turns;
-            }
-        }
+        public int turns;
+    }
 
+    public class Prompt<TValue> : Topic<PromptState, TValue>
+    {
         private Action<IBotContext, string> _onPrompt;
-        public Prompt<TValue> OnPrompt(Action<IBotContext, string> onPrompt)
-        {
-            _onPrompt = onPrompt;
-            return this;
-        }
+        public Action<IBotContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
 
         private int _maxTurns = 2;
-        public Prompt<TValue> MaxTurns(int maxTurns)
-        {
-            _maxTurns = maxTurns;
-            return this;
-        }
+        public int MaxTurns { get => _maxTurns; set => _maxTurns = value; }
 
         private Validator<TValue> _validator;
-        public Prompt<TValue> Validator(Validator<TValue> validator)
-        {
-            _validator = validator;
-            return this;
-        }
+        public Validator<TValue> Validator { get => _validator; set => _validator = value; }
 
         public override Task OnReceiveActivity(IBotContext context)
         {
             // If this is the initial turn (turn 0), send the initial prompt.
-            if (_turns == 0)
+            if (this._state.turns == 0)
             {
                 _onPrompt(context, null);
                 return Task.CompletedTask;
@@ -55,10 +39,10 @@ namespace PromptlyBot
             if (validationResult.Reason != null)
             {
                 // Increase the turn count.
-                _turns += 1;
+                this._state.turns += 1;
 
                 // If max turns has been reached, the prompt has failed with too many attempts.
-                if (_turns == _maxTurns)
+                if (this._state.turns == _maxTurns)
                 {
                     validationResult.Reason = "toomanyattempts";
 
@@ -75,5 +59,5 @@ namespace PromptlyBot
             this.OnSuccess(context, validationResult.Value);
             return Task.CompletedTask;
         }
-    }*/
+    }
 }
