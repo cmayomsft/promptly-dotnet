@@ -26,6 +26,8 @@ namespace PromptlyBot
             // If this is the initial turn (turn 0), send the initial prompt.
             if (this._state.turns == 0)
             {
+                this._state.turns += 1;
+
                 _onPrompt(context, null);
                 return Task.CompletedTask;
             }

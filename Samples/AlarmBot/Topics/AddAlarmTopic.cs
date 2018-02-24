@@ -8,7 +8,7 @@ namespace AlarmBot.Topics
 {
     public class AddAlarmTopicState : ConversationTopicState
     {
-        public Alarm alarm;
+        public Alarm alarm = new Alarm();
     }
 
     public class AddAlarmTopic : ConversationTopic<AddAlarmTopicState, Alarm>

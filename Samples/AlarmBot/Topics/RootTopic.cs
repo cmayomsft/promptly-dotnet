@@ -1,6 +1,8 @@
-﻿using Microsoft.Bot.Builder;
+﻿using AlarmBot.Models;
+using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using PromptlyBot;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
@@ -11,8 +13,15 @@ namespace AlarmBot.Topics
         private const string SIMPLE_VALUE_TOPIC = "simpleValueTopic";
         private const string ADD_ALARM_TOPIC = "addAlarmTopic";
 
+        private const string USER_STATE_ALARMS = "Alarms";
+
         public RootTopic(IBotContext context) : base(context)
         {
+            if (context.State.User[USER_STATE_ALARMS] == null)
+            {
+                context.State.User[USER_STATE_ALARMS] = new List<Alarm>();
+            }
+
             this.SubTopics.Add(SIMPLE_TOPIC, () =>
                 {
                     return new SimpleTopic
@@ -53,19 +62,26 @@ namespace AlarmBot.Topics
             {
                 return new AddAlarmTopic
                 {
-                    OnSuccess = (ctx, value) =>
+                    OnSuccess = (ctx, alarm) =>
                     {
-                        context.Reply($"AddAlarmTopic.OnSuccess() - { value.Title + " - " + value.Time }");
                         this.ClearActiveTopic();
+
+                        ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).Add(alarm);
+
+                        context.Reply($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
                     },
                     OnFailure = (ctx, reason) =>
                     {
                         this.ClearActiveTopic();
-                        context.Reply($"AddAlarmTopic.OnFailure() - { reason }");
-                    },
 
+                        context.Reply("Let's try something else.");
+
+                        this.ShowDefaultMessage(context);
+                    }
                 };
             });
+
+
         }
 
         public override Task OnReceiveActivity(IBotContext context)
