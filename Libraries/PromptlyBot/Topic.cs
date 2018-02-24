@@ -16,14 +16,14 @@ namespace PromptlyBot
         Action<IBotContext, string> OnFailure { get; set; }
     }
 
-    public abstract class Topic<TState> : ITopic
+    public abstract class Topic<TState> : ITopic where TState : new()
     {
         protected TState _state;
         public object State { get => _state; set => _state = (TState)value; }
 
-        public Topic(TState state)
+        public Topic()
         {
-            _state = state;
+            _state = new TState();
         }
 
         public abstract Task OnReceiveActivity(IBotContext context);

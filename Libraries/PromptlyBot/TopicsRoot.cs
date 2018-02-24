@@ -7,7 +7,7 @@ namespace PromptlyBot
 {
     public abstract class TopicsRoot : ConversationTopic<ConversationTopicState>
     {
-        public TopicsRoot(IBotContext context) : base(null)
+        public TopicsRoot(IBotContext context) : base()
         {
             if (context.State.Conversation["RootTopic"] == null)
             {
