@@ -52,7 +52,7 @@ namespace PromptlyBot
 
         public bool HasActiveTopic => (this._state.ActiveTopic != null);
 
-        public void ClearActiveTopic() => _activeTopic = null;
+        public void ClearActiveTopic() => this._state.ActiveTopic = null;
     }
 
     /*public static class ConversationTopicExtension
