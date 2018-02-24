@@ -5,12 +5,29 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
-    //[DataContract()]
-    //[Serializable]
-    public abstract class Topic<TState>
+    public interface ITopic<TValue>
+    {
+        Task OnReceiveActivity(IBotContext context);
+
+        Action<IBotContext, TValue> OnSuccess { get; set; }
+
+        Action<IBotContext, string> OnFailure { get; set; }
+    }
+
+    /*public interface ITopicValue<TValue> : ITopic
+    {
+        new Action<IBotContext, TValue> OnSuccess { get; set; }
+    }*/
+
+    public interface IState
+    {
+        object State { get; set; }
+    }
+
+    public abstract class Topic<TState, TValue> : ITopic<TValue>, IState
     {
         private TState _state;
-        public TState State { get => _state; set => _state = value; }
+        public object State { get => _state; set => _state = (TState)value; }
 
         public Topic(TState state)
         {
@@ -19,14 +36,11 @@ namespace PromptlyBot
 
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        private Action<IBotContext> _onSuccess;
-        // TODO: Remove private set, unless needed for DataContract.
-        //[DataMember]
-        public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
+        private Action<IBotContext, TValue> _onSuccess;
+        public Action<IBotContext, TValue> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
 
         private Action<IBotContext, string> _onFailure;
-        //[DataMember]
         public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
     }
 
@@ -47,7 +61,7 @@ namespace PromptlyBot
 
     //[Serializable]
     //[DataContract]
-    public abstract class Topic<TState, TValue> : Topic<TState>
+    /*public abstract class Topic<TState, TValue> : Topic<TState>
     {
         public Topic(TState state) : base(state) { }
 
@@ -55,7 +69,7 @@ namespace PromptlyBot
         // TODO: Remove private set, unless needed for DataContract.
         [DataMember]
         public new Action<IBotContext, TValue> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
-    }
+    }*/
 
     /*public static class TopicTValueExtension
     {

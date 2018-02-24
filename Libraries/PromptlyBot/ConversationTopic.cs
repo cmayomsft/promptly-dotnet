@@ -22,9 +22,9 @@ namespace PromptlyBot
         public ConversationTopic(TState state) : base(state) { }
 
         private Dictionary<string, Func<Topic<object>>> _subTopics;
-        public Dictionary<string, Func<Topic<object>>> SubTopics { get => _subTopics; }
+        public Dictionary<string, Func<ITopic<object>>> SubTopics { get => _subTopics; }
 
-        private Topic<object> _activeTopic;
+        private ITopic<object> _activeTopic;
         //[DataMember]
         //public Topic<object> ActiveTopic { get => _activeTopic; set => _activeTopic = value; }
         public void SetActiveTopic(string subTopicKey)
@@ -33,7 +33,7 @@ namespace PromptlyBot
 
             this.State.ActiveTopic = new ActiveTopicState { Key = subTopicKey, State = this._activeTopic.State };
         }
-        public Topic<object> ActiveTopic
+        public ITopic<object> ActiveTopic
         {
             get
             {
@@ -70,7 +70,7 @@ namespace PromptlyBot
     }*/
 
     //[DataContract()]
-    public abstract class ConversationTopic<TState, TValue> : Topic<TState, TValue> where TState : ConversationTopicState
+    /*public abstract class ConversationTopic<TState, TValue> : Topic<TState, TValue> where TState : ConversationTopicState
     {
         public ConversationTopic(TState state) : base(state) { }
 
@@ -117,7 +117,7 @@ namespace PromptlyBot
         public bool HasActiveTopic => (_activeTopic != null);
 
         public void ClearActiveTopic() => _activeTopic = null;
-    }
+    }*/
 
     /*public static class ConversationTopicTValueExtension
     {
