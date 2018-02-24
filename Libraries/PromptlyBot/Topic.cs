@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 
 namespace PromptlyBot
 {
+    public delegate void OnSuccessValueDelegate(IBotContext context);
+
     public interface ITopic
     {
         object State { get; set; }
@@ -12,6 +14,8 @@ namespace PromptlyBot
         Task OnReceiveActivity(IBotContext context);
 
         Action<IBotContext> OnSuccess { get; set; }
+        // This works, but the value comes back as an object[], so you'd have to cast. Not idea.
+        OnSuccessValueDelegate OnSuccessValue { get; set; }
 
         Action<IBotContext, string> OnFailure { get; set; }
     }
@@ -34,6 +38,9 @@ namespace PromptlyBot
 
         private Action<IBotContext, string> _onFailure;
         public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
+
+        private OnSuccessValueDelegate _onSuccessValue;
+        public OnSuccessValueDelegate OnSuccessValue { get => _onSuccessValue; set => _onSuccessValue = value; }
     }
 
     /*public static class TopicExtension

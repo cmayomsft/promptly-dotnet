@@ -22,7 +22,13 @@ namespace AlarmBot.Topics
                             {
                                 this.ClearActiveTopic();
                                 context.Reply($"SimpleTopic.OnFailure() - { reason }");
+                            },
+                        OnSuccessValue = (ctx, value) =>
+                            {
+                                this.ClearActiveTopic();
+                                context.Reply($"SimpleTopic.OnSuccessValue() - { value }");
                             }
+
                     };
                 });
         }
