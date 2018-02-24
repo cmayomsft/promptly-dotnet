@@ -24,7 +24,7 @@ namespace AlarmBot.Topics
                 {
                     OnPrompt = (context, lastTurnReason) => 
                         {
-                            if (lastTurnReason != null)
+                            if ((lastTurnReason != null) && (lastTurnReason == "titletoolong"))
                             {
                                 context.Reply("Sorry, alarm titles must be less that 20 characters.")
                                     .Reply("Let's try again.");
