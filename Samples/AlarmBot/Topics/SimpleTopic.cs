@@ -1,6 +1,5 @@
 ﻿using Microsoft.Bot.Builder;
 using PromptlyBot;
-using System;
 using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
