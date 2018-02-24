@@ -6,7 +6,7 @@ namespace AlarmBot.Topics
 {
     public class SimpleTopicState
     {
-        public string name;
+        public int turns;
     }
 
     public class SimpleTopic : Topic<SimpleTopicState>
@@ -16,6 +16,9 @@ namespace AlarmBot.Topics
         public override Task OnReceiveActivity(IBotContext context)
         {
             context.Reply("SimpleTopic.OnReceiveActivity()");
+
+            this.OnFailure(context, "failed");
+
             return Task.CompletedTask;
         }
     }

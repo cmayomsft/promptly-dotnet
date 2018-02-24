@@ -9,7 +9,22 @@ namespace AlarmBot.Topics
     {
         public RootTopic(IBotContext context) : base(context)
         {
-            this.SubTopics.Add("simpleTopic", () => new SimpleTopic());
+            this.SubTopics.Add("simpleTopic", () => 
+                {
+                    return new SimpleTopic
+                    {
+                        OnSuccess = (ctx) =>
+                            {
+                                this.ClearActiveTopic();
+                                context.Reply("SimpleTopic.OnSuccess()");
+                            },
+                        OnFailure = (ctx, reason) =>
+                            {
+                                this.ClearActiveTopic();
+                                context.Reply($"SimpleTopic.OnFailure() - { reason }");
+                            }
+                    };
+                });
         }
 
         public override Task OnReceiveActivity(IBotContext context)
