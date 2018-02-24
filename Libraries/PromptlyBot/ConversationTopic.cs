@@ -14,7 +14,7 @@ namespace PromptlyBot
         public ActiveTopicState ActiveTopic;
     }
 
-    public abstract class ConversationTopic<TState, TValue> : Topic<TState, TValue> where TState : ConversationTopicState, new()
+    public abstract class ConversationTopic<TState> : Topic<TState> where TState : ConversationTopicState, new()
     {
         private Dictionary<string, Func<ITopic>> _subTopics = new Dictionary<string, Func<ITopic>>();
         public Dictionary<string, Func<ITopic>> SubTopics { get => _subTopics; }
@@ -46,10 +46,16 @@ namespace PromptlyBot
                 return this._activeTopic;
             }
         }
-        
+
         public bool HasActiveTopic => (this._state.ActiveTopic != null);
 
         public void ClearActiveTopic() => this._state.ActiveTopic = null;
+    }
+
+
+    public abstract class ConversationTopic<TState, TValue> : ConversationTopic<TState> where TState : ConversationTopicState, new()
+    {
+
     }
 
     /*public static class ConversationTopicExtension

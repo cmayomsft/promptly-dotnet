@@ -19,7 +19,7 @@ namespace AlarmBot.Topics
 
             if (this._state.turns > 1)
             {
-                this.OnSuccessValue(context, this._state.turns);
+                this.OnSuccess(context);
             }
 
             return Task.CompletedTask;

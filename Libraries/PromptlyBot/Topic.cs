@@ -16,7 +16,7 @@ namespace PromptlyBot
         Action<IBotContext, string> OnFailure { get; set; }
     }
 
-    public abstract class Topic<TState, TValue> : ITopic where TState : new()
+    public abstract class Topic<TState> : ITopic where TState : new()
     {
         protected TState _state;
         object ITopic.State { get => _state; set => State = (TState)value; }
@@ -29,14 +29,17 @@ namespace PromptlyBot
 
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        private Action<IBotContext, TValue> _onSuccessValue;
-        public Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
-
         private Action<IBotContext> _onSuccess;
-        Action<IBotContext> ITopic.OnSuccess { get => _onSuccess; set => _onSuccess = value; }
+        public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
         private Action<IBotContext, string> _onFailure;
         public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
+    }
+
+    public abstract class Topic<TState, TValue> : Topic<TState> where TState : new()
+    {
+        private Action<IBotContext, TValue> _onSuccessValue;
+        public new Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
     }
 
     /*public static class TopicExtension

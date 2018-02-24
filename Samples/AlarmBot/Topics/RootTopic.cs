@@ -9,13 +9,13 @@ namespace AlarmBot.Topics
     {
         public RootTopic(IBotContext context) : base(context)
         {
-            this.SubTopics.Add("simpleTopic", () => 
+            this.SubTopics.Add("simpleTopic", () =>
                 {
                     return new SimpleTopic
                     {
                         OnSuccess = (ctx) =>
                             {
-                                context.Reply($"SimpleTopic.OnSuccess() - { ((SimpleTopicState)this.ActiveTopic.State).turns }");
+                                context.Reply($"SimpleTopic.OnSuccess()");
                                 this.ClearActiveTopic();
                             },
                         OnFailure = (ctx, reason) =>
@@ -23,14 +23,27 @@ namespace AlarmBot.Topics
                                 this.ClearActiveTopic();
                                 context.Reply($"SimpleTopic.OnFailure() - { reason }");
                             },
-                        OnSuccessValue = (ctx, value) =>
-                            {
-                                this.ClearActiveTopic();
-                                context.Reply($"SimpleTopic.OnSuccessValue() - { value }");
-                            }
 
                     };
                 });
+
+            this.SubTopics.Add("simpleValueTopic", () =>
+            {
+                return new SimpleValueTopic
+                {
+                    OnSuccess = (ctx, value) =>
+                    {
+                        context.Reply($"SimpleValueTopic.OnSuccess() - { value }");
+                        this.ClearActiveTopic();
+                    },
+                    OnFailure = (ctx, reason) =>
+                    {
+                        this.ClearActiveTopic();
+                        context.Reply($"SimpleValueTopic.OnFailure() - { reason }");
+                    },
+
+                };
+            });
         }
 
         public override Task OnReceiveActivity(IBotContext context)
@@ -46,18 +59,12 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
-                /*if (message.Text.ToLowerInvariant() == "simple value")
+                if (message.Text.ToLowerInvariant() == "simple value")
                 {
-                    var simpleValueTopic = new SimpleValueTopic();
-
-                    simpleValueTopic.OnSuccess = (ctx, value) => { };
-                    simpleValueTopic.OnFailure = (ctx, reason) => { };
-
-                    this.ActiveTopic = simpleValueTopic;
-
-                    simpleValueTopic.OnReceiveActivity(context);
+                    this.SetActiveTopic("simpleValueTopic");
+                    this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
-                }*/
+                }
 
                 /*if (message.Text.ToLowerInvariant() == "simple conversation topic")
                 {
