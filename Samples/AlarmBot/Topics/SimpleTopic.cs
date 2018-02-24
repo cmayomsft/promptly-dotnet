@@ -11,13 +11,16 @@ namespace AlarmBot.Topics
 
     public class SimpleTopic : Topic<SimpleTopicState>
     {
-        public SimpleTopic(SimpleTopicState state = null) : base(state) { }
-
         public override Task OnReceiveActivity(IBotContext context)
         {
-            context.Reply("SimpleTopic.OnReceiveActivity()");
+            context.Reply($"SimpleTopic.OnReceiveActivity() - { this._state.turns }");
 
-            this.OnFailure(context, "failed");
+            this._state.turns += 1;
+
+            if (this._state.turns > 1)
+            {
+                this.OnSuccess(context);
+            }
 
             return Task.CompletedTask;
         }
