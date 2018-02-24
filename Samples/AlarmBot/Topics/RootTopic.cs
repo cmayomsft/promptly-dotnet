@@ -20,16 +20,8 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "simple")
                 {
-                    // Start Here: Won't serialize delegates, which worked in V3 w/ Serializable.
-                    var simpleTopic = new SimpleTopic
-                    {
-                        OnSuccess = (ctx) => { },
-                        OnFailure = (ctx, reason) => { }
-                    };
-
-                    this.SetActiveTopic(simpleTopic)
-
-                    simpleTopic.OnReceiveActivity(context);
+                    this.SetActiveTopic("simpleTopic");
+                    this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
