@@ -20,8 +20,10 @@ namespace AlarmBot.Topics
         {
             this.SubTopics.Add(TITLE_PROMPT, () =>
             {
-                return new Prompt<string>()
-                    .SetOnPrompt((context, lastTurnReason) =>
+                var titlePrompt = new Prompt<string>();
+
+                titlePrompt.Set
+                    .OnPrompt((context, lastTurnReason) =>
                         {
                             if ((lastTurnReason != null) && (lastTurnReason == "titletoolong"))
                             {
@@ -31,57 +33,76 @@ namespace AlarmBot.Topics
 
                             context.Reply("What would you like to name your alarm?");
                         })
-                    .SetValidator(new AlarmTitleValidator())
-                    .SetMaxTurns(2)
-                    .SetOnSuccess((context, value) =>
+                    .OnPrompt((context, lastTurnReason) =>
                         {
-                            this.ClearActiveTopic();
-
-                            this.State.alarm.Title = value;
-
-                            this.OnReceiveActivity(context);
-                        })
-                    .SetOnFailure((context, reason) =>
-                        {
-                            this.ClearActiveTopic();
-
-                            if ((reason != null) && (reason == "toomanyattempts"))
+                            if ((lastTurnReason != null) && (lastTurnReason == "titletoolong"))
                             {
-                                context.Reply("I'm sorry I'm having issues understanding you.");
+                                context.Reply("Sorry, alarm titles must be less that 20 characters.")
+                                    .Reply("Let's try again.");
                             }
 
-                            this.OnFailure(context, reason);
-                        });
+                            context.Reply("What would you like to name your alarm?");
+                        })
+                    .Validator(new AlarmTitleValidator())
+                    .MaxTurns(2);
+
+                titlePrompt.SetOnSuccess((context, value) =>
+                    {
+                        this.ClearActiveTopic();
+
+                        this.State.alarm.Title = value;
+
+                        this.OnReceiveActivity(context);
+                    })
+                    .SetOnFailure((context, reason) =>
+                    {
+                        this.ClearActiveTopic();
+
+                        if ((reason != null) && (reason == "toomanyattempts"))
+                        {
+                            context.Reply("I'm sorry I'm having issues understanding you.");
+                        }
+
+                        this.OnFailure(context, reason);
+                    });
+
+                return titlePrompt;
             });
 
             this.SubTopics.Add(TIME_PROMPT, () =>
             {
-                return new Prompt<string>()
-                    .SetOnPrompt((context, lastTurnReason) =>
-                        {
-                            context.Reply("What time would you like to set your alarm for?");
-                        })
-                    .SetValidator(new AlarmTimeValidator())
-                    .SetMaxTurns(2)
+                var timePrompt = new Prompt<string>();
+
+                timePrompt.Set
+                    .OnPrompt((context, lastTurnReason) =>
+                    {
+                        context.Reply("What time would you like to set your alarm for?");
+                    })
+                    .Validator(new AlarmTimeValidator())
+                    .MaxTurns(2);
+
+                timePrompt
                     .SetOnSuccess((context, value) =>
-                        {
-                            this.ClearActiveTopic();
+                    {
+                        this.ClearActiveTopic();
 
-                            this.State.alarm.Time = value;
+                        this.State.alarm.Time = value;
 
-                            this.OnReceiveActivity(context);
-                        })
+                        this.OnReceiveActivity(context);
+                    })
                     .SetOnFailure((context, reason) =>
+                    {
+                        this.ClearActiveTopic();
+
+                        if ((reason != null) && (reason == "toomanyattempts"))
                         {
-                            this.ClearActiveTopic();
+                            context.Reply("I'm sorry I'm having issues understanding you.");
+                        }
 
-                            if ((reason != null) && (reason == "toomanyattempts"))
-                            {
-                                context.Reply("I'm sorry I'm having issues understanding you.");
-                            }
+                        this.OnFailure(context, reason);
+                    });
 
-                            this.OnFailure(context, reason);
-                        });
+                return timePrompt;
             });
 
         }
