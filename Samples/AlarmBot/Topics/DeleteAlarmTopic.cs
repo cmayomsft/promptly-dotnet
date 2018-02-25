@@ -38,80 +38,76 @@ namespace AlarmBot.Topics
 
             this.SubTopics.Add(WHICH_ALARM_PROMPT, () =>
             {
-                return new Prompt<int>
-                {
-                    OnPrompt = (context, lastTurnReason) =>
-                    {
-                        if ((lastTurnReason != null) && (lastTurnReason == "indexnotfound"))
+                return new Prompt<int>()
+                    .SetOnPrompt((context, lastTurnReason) =>
                         {
-                            context.Reply($"Sorry, I coulnd't find an alarm named '{ context.Request.AsMessageActivity().Text }'.")
-                                .Reply("Let's try again.");
-                        }
+                            if ((lastTurnReason != null) && (lastTurnReason == "indexnotfound"))
+                            {
+                                context.Reply($"Sorry, I coulnd't find an alarm named '{ context.Request.AsMessageActivity().Text }'.")
+                                    .Reply("Let's try again.");
+                            }
 
-                        this.ShowAlarms(context, this._state.Alarms);
+                            this.ShowAlarms(context, this._state.Alarms);
 
-                        context.Reply("Which alarm would you like to delete?");
-                    },
-                    Validator = new AlarmIndexValidator(alarms),
-                    MaxTurns = 2,
-                    OnSuccess = (context, index) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        this.State.AlarmIndex = index;
-
-                        this.OnReceiveActivity(context);
-                    },
-                    OnFailure = (context, reason) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        if ((reason != null) && (reason == "toomanyattempts"))
+                            context.Reply("Which alarm would you like to delete?");
+                        })
+                    .SetValidator(new AlarmIndexValidator(alarms))
+                    .SetMaxTurns(2)
+                    .SetOnSuccess((context, index) =>
                         {
-                            context.Reply("I'm sorry I'm having issues understanding you.");
-                        }
+                            this.ClearActiveTopic();
 
-                        this.OnFailure(context, reason);
-                    }
-                };
+                            this.State.AlarmIndex = index;
+
+                            this.OnReceiveActivity(context);
+                        })
+                    .SetOnFailure(OnFailure = (context, reason) =>
+                        {
+                            this.ClearActiveTopic();
+
+                            if ((reason != null) && (reason == "toomanyattempts"))
+                            {
+                                context.Reply("I'm sorry I'm having issues understanding you.");
+                            }
+
+                            this.OnFailure(context, reason);
+                        });
             });
 
             this.SubTopics.Add(CONFIRM_DELETE_PROMPT, () =>
             {
-                return new Prompt<bool>
-                {
-                    OnPrompt = (context, lastTurnReason) =>
-                    {
-                        if ((lastTurnReason != null) & (lastTurnReason == "notyesorno"))
+                return new Prompt<bool>()
+                    .SetOnPrompt((context, lastTurnReason) =>
                         {
-                            context.Reply("Sorry, I was expecting 'yes' or 'no'.")
-                                .Reply("Let's try again.");
-                        }
+                            if ((lastTurnReason != null) & (lastTurnReason == "notyesorno"))
+                            {
+                                context.Reply("Sorry, I was expecting 'yes' or 'no'.")
+                                    .Reply("Let's try again.");
+                            }
 
-                        context.Reply($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
-                    },
-                    Validator = new YesOrNoValidator(),
-                    MaxTurns = 2,
-                    OnSuccess = (context, value) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        this.State.DeleteConfirmed = value;
-
-                        this.OnReceiveActivity(context);
-                    },
-                    OnFailure = (context, reason) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        if ((reason != null) && (reason == "toomanyattempts"))
+                            context.Reply($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
+                        })
+                    .SetValidator(new YesOrNoValidator())
+                    .SetMaxTurns(2)
+                    .SetOnSuccess((context, value) =>
                         {
-                            context.Reply("I'm sorry I'm having issues understanding you.");
-                        }
+                            this.ClearActiveTopic();
 
-                        this.OnFailure(context, reason);
-                    }
-                };
+                            this.State.DeleteConfirmed = value;
+
+                            this.OnReceiveActivity(context);
+                        })
+                    .SetOnFailure((context, reason) =>
+                        {
+                            this.ClearActiveTopic();
+
+                            if ((reason != null) && (reason == "toomanyattempts"))
+                            {
+                                context.Reply("I'm sorry I'm having issues understanding you.");
+                            }
+
+                            this.OnFailure(context, reason);
+                        });
             });
 
         }
