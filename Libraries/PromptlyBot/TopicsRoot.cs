@@ -1,7 +1,4 @@
 ﻿using Microsoft.Bot.Builder;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PromptlyBot
 {
