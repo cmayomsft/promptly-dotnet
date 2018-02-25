@@ -7,7 +7,7 @@ namespace PromptlyBot
 {
     public class PromptState
     {
-        public int turns;
+        public int? turns;
     }
 
     public class Prompt<TValue> : Topic<PromptState, TValue>
@@ -24,9 +24,9 @@ namespace PromptlyBot
         public override Task OnReceiveActivity(IBotContext context)
         {
             // If this is the initial turn (turn 0), send the initial prompt.
-            if (this._state.turns == 0)
+            if (this._state.turns == null)
             {
-                this._state.turns += 1;
+                this._state.turns = 0;
 
                 _onPrompt(context, null);
                 return Task.CompletedTask;
