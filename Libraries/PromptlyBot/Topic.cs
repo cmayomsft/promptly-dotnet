@@ -31,15 +31,30 @@ namespace PromptlyBot
 
         private Action<IBotContext> _onSuccess;
         public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
+        public ITopic SetOnSuccess(Action<IBotContext> onSuccess)
+        {
+            _onSuccess = onSuccess;
+            return this;
+        }
 
         private Action<IBotContext, string> _onFailure;
         public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
+        public Topic<TState> SetOnFailure(Action<IBotContext, string> onFailure)
+        {
+            _onFailure = onFailure;
+            return this;
+        }
     }
 
     public abstract class Topic<TState, TValue> : Topic<TState> where TState : new()
     {
         private Action<IBotContext, TValue> _onSuccessValue;
-        public new Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        new public Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        public Topic<TState, TValue> SetOnSuccess(Action<IBotContext, TValue> onSuccess)
+        {
+            _onSuccessValue = onSuccess;
+            return this;
+        }
     }
 
     /*public static class TopicExtension

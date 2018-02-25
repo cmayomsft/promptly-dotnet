@@ -59,7 +59,13 @@ namespace PromptlyBot
     public abstract class ConversationTopic<TState, TValue> : ConversationTopic<TState> where TState : ConversationTopicState, new()
     {
         private Action<IBotContext, TValue> _onSuccessValue;
-        public new Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        new public Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        public ConversationTopic<TState, TValue> SetOnSuccess(Action<IBotContext, TValue> onSuccess)
+        {
+            this._onSuccessValue = onSuccess;
+
+            return this;
+        }
     }
 
     /*public static class ConversationTopicExtension
