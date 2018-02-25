@@ -25,7 +25,25 @@ namespace AlarmBot.Topics
 
             this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
             {
-                return new AddAlarmTopic
+                return new AddAlarmTopic()
+                    .SetOnSuccess((ctx, alarm) =>
+                        {
+                            this.ClearActiveTopic();
+
+                            ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).Add(alarm);
+
+                            context.Reply($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
+                        })
+                    .SetOnFailure((ctx, reason) =>
+                    {
+                        this.ClearActiveTopic();
+
+                        context.Reply("Let's try something else.");
+
+                        this.ShowDefaultMessage(context);
+                    });
+                    
+                /*return new AddAlarmTopic
                 {
                     OnSuccess = (ctx, alarm) =>
                     {
@@ -43,7 +61,7 @@ namespace AlarmBot.Topics
 
                         this.ShowDefaultMessage(context);
                     }
-                };
+                };*/
             });
 
             this.SubTopics.Add(DELETE_ALARM_TOPIC, () =>
