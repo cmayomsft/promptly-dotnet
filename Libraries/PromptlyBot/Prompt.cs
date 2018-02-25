@@ -51,27 +51,12 @@ namespace PromptlyBot
 
         private Action<IBotContext, string> _onPrompt;
         public Action<IBotContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
-        public Prompt<TValue> SetOnPrompt(Action<IBotContext, string> onPrompt)
-        {
-            this._onPrompt = onPrompt;
-            return this;
-        }
 
         private int _maxTurns = 2;
         public int MaxTurns { get => _maxTurns; set => _maxTurns = value; }
-        public Prompt<TValue> SetMaxTurns(int maxTurns)
-        {
-            this._maxTurns = maxTurns;
-            return this;
-        }
 
         private Validator<TValue> _validator;
         public Validator<TValue> Validator { get => _validator; set => _validator = value; }
-        public Prompt<TValue> SetValidator(Validator<TValue> validator)
-        {
-            this._validator = validator;
-            return this;
-        }
 
         public override Task OnReceiveActivity(IBotContext context)
         {
