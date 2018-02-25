@@ -42,26 +42,6 @@ namespace AlarmBot.Topics
 
                         this.ShowDefaultMessage(context);
                     });
-                    
-                /*return new AddAlarmTopic
-                {
-                    OnSuccess = (ctx, alarm) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).Add(alarm);
-
-                        context.Reply($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
-                    },
-                    OnFailure = (ctx, reason) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        context.Reply("Let's try something else.");
-
-                        this.ShowDefaultMessage(context);
-                    }
-                };*/
             });
 
             this.SubTopics.Add(DELETE_ALARM_TOPIC, () =>
@@ -114,6 +94,13 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
+                if (message.Text.ToLowerInvariant() == "help")
+                {
+                    this.ClearActiveTopic();
+                    this.ShowHelp(context);
+                    return Task.CompletedTask;
+                }
+
                 if (HasActiveTopic)
                 {
                     ActiveTopic.OnReceiveActivity(context);
@@ -129,6 +116,17 @@ namespace AlarmBot.Topics
         private void ShowDefaultMessage(IBotContext context)
         {
             context.Reply("'Show Alarms', 'Add Alarm', 'Delete Alarm', 'Help'.");
+        }
+
+        private void ShowHelp(IBotContext context)
+        {
+            var message = "Here's what I can do:\n\n";
+            message += "To see your alarms, say 'Show Alarms'.\n\n";
+            message += "To add an alarm, say 'Add Alarm'.\n\n";
+            message += "To delete an alarm, say 'Delete Alarm'.\n\n";
+            message += "To see this again, say 'Help'.";
+
+            context.Reply(message);
         }
     }
 }
