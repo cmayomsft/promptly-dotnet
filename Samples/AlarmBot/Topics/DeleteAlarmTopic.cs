@@ -12,9 +12,9 @@ namespace AlarmBot.Topics
     public class DeleteAlarmTopicState : ConversationTopicState
     {
         public List<Alarm> Alarms;
-        public int AlarmIndex;
-        public Alarm Alarm;
-        public bool DeleteConfirmed;
+        public int? AlarmIndex;
+        public Alarm Alarm = new Alarm();
+        public bool? DeleteConfirmed;
     }
 
     public class DeleteAlarmTopicValue
@@ -44,7 +44,7 @@ namespace AlarmBot.Topics
                     {
                         if ((lastTurnReason != null) && (lastTurnReason == "indexnotfound"))
                         {
-                            context.Reply("Sorry, alarm titles must be less that 20 characters.")
+                            context.Reply($"Sorry, I coulnd't find an alarm named '{ context.Request.AsMessageActivity().Text }'.")
                                 .Reply("Let's try again.");
                         }
 
@@ -52,13 +52,13 @@ namespace AlarmBot.Topics
 
                         context.Reply("Which alarm would you like to delete?");
                     },
-                    Validator = new AlarmTitleValidator(),
+                    Validator = new AlarmIndexValidator(alarms),
                     MaxTurns = 2,
-                    OnSuccess = (context, value) =>
+                    OnSuccess = (context, index) =>
                     {
                         this.ClearActiveTopic();
 
-                        this.State.alarm.Title = value;
+                        this.State.AlarmIndex = index;
 
                         this.OnReceiveActivity(context);
                     },
@@ -70,25 +70,33 @@ namespace AlarmBot.Topics
                         {
                             context.Reply("I'm sorry I'm having issues understanding you.");
                         }
+
+                        this.OnFailure(context, reason);
                     }
                 };
             });
 
-            this.SubTopics.Add(TIME_PROMPT, () =>
+            this.SubTopics.Add(CONFIRM_DELETE_PROMPT, () =>
             {
-                return new Prompt<string>
+                return new Prompt<bool>
                 {
                     OnPrompt = (context, lastTurnReason) =>
                     {
-                        context.Reply("What time would you like to set your alarm for?");
+                        if ((lastTurnReason != null) & (lastTurnReason == "notyesorno"))
+                        {
+                            context.Reply("Sorry, I was expecting 'yes' or 'no'.")
+                                .Reply("Let's try again.");
+                        }
+
+                        context.Reply($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
                     },
-                    Validator = new AlarmTimeValidator(),
+                    Validator = new YesOrNoValidator(),
                     MaxTurns = 2,
                     OnSuccess = (context, value) =>
                     {
                         this.ClearActiveTopic();
 
-                        this.State.alarm.Time = value;
+                        this.State.DeleteConfirmed = value;
 
                         this.OnReceiveActivity(context);
                     },
@@ -100,10 +108,62 @@ namespace AlarmBot.Topics
                         {
                             context.Reply("I'm sorry I'm having issues understanding you.");
                         }
+
+                        this.OnFailure(context, reason);
                     }
                 };
             });
 
+        }
+
+        public override Task OnReceiveActivity(IBotContext context)
+        {
+            if (HasActiveTopic)
+            {
+                ActiveTopic.OnReceiveActivity(context);
+                return Task.CompletedTask;
+            }
+
+            // If there are no alarms to delete...
+            if (this.State.Alarms.Count == 0)
+            {
+                context.Reply("There are no alarms to delete.");
+                return Task.CompletedTask;
+            }
+
+            if (this.State.AlarmIndex == null)
+            {
+                // If there is only one alarm to delete, use that index. No need to prompt.
+                if (this.State.Alarms.Count == 1)
+                {
+                    this.ShowAlarms(context, this.State.Alarms);
+
+                    this.State.AlarmIndex = 0;
+                }
+                else
+                {
+                    this.SetActiveTopic(WHICH_ALARM_PROMPT);
+                    this.ActiveTopic.OnReceiveActivity(context);
+                    return Task.CompletedTask;
+                }
+            }
+
+            this.State.Alarm.Title = this.State.Alarms[(int)this.State.AlarmIndex].Title;
+
+            if (this.State.DeleteConfirmed == null)
+            {
+                this.SetActiveTopic(CONFIRM_DELETE_PROMPT);
+                this.ActiveTopic.OnReceiveActivity(context);
+                return Task.CompletedTask;
+            }
+
+            this.OnSuccess(context, new DeleteAlarmTopicValue
+            {
+                Alarm = this.State.Alarm,
+                AlarmIndex = (int)this.State.AlarmIndex,
+                DeleteConfirmed = (bool)this.State.DeleteConfirmed
+            });
+            return Task.CompletedTask;
         }
 
         private void ShowAlarms(IBotContext context, List<Alarm> alarms)
@@ -116,7 +176,7 @@ namespace AlarmBot.Topics
 
             if (alarms.Count == 1)
             {
-                context.Reply($"You have one alarm named '{ alarms[0].Time }', set for '{ alarms[0].Time }'.");
+                context.Reply($"You have one alarm named '{ alarms[0].Title }', set for '{ alarms[0].Time }'.");
                 return;
             }
 
@@ -127,11 +187,6 @@ namespace AlarmBot.Topics
             }
 
             context.Reply(message);
-        }
-
-        public override Task OnReceiveActivity(IBotContext context)
-        {
-            throw new NotImplementedException();
         }
     }
 
@@ -160,6 +215,36 @@ namespace AlarmBot.Topics
                 return new ValidatorResult<int>
                 {
                     Reason = "indexnotfound"
+                };
+            }
+        }
+    }
+
+    public class YesOrNoValidator : Validator<bool>
+    {
+        public override ValidatorResult<bool> Validate(IBotContext context)
+        {
+            var message = context.Request.AsMessageActivity().Text.ToLowerInvariant();
+
+            if (message == "yes")
+            {
+                return new ValidatorResult<bool>
+                {
+                    Value = true
+                };
+            }
+            else if(message == "no")
+            {
+                return new ValidatorResult<bool>
+                {
+                    Value = false
+                };
+            }
+            else
+            {
+                return new ValidatorResult<bool>
+                {
+                    Reason = "notyesorno"
                 };
             }
         }

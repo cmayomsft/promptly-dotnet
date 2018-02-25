@@ -50,6 +50,8 @@ namespace AlarmBot.Topics
                             {
                                 context.Reply("I'm sorry I'm having issues understanding you.");
                             }
+
+                            this.OnFailure(context, reason);
                         }
                 };
             });
@@ -80,6 +82,8 @@ namespace AlarmBot.Topics
                         {
                             context.Reply("I'm sorry I'm having issues understanding you.");
                         }
+
+                        this.OnFailure(context, reason);
                     }
                 };
             });

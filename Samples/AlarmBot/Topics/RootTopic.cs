@@ -10,6 +10,7 @@ namespace AlarmBot.Topics
     public class RootTopic : TopicsRoot
     {
         private const string ADD_ALARM_TOPIC = "addAlarmTopic";
+        private const string DELETE_ALARM_TOPIC = "deleteAlarmTopic";
 
         private const string USER_STATE_ALARMS = "Alarms";
 
@@ -44,6 +45,35 @@ namespace AlarmBot.Topics
                     }
                 };
             });
+
+            this.SubTopics.Add(DELETE_ALARM_TOPIC, () =>
+            {
+                return new DeleteAlarmTopic(context.State.User[USER_STATE_ALARMS])
+                {
+                    OnSuccess = (ctx, value) =>
+                    {
+                        this.ClearActiveTopic();
+
+                        if (!value.DeleteConfirmed)
+                        {
+                            context.Reply($"Ok, I won't delete alarm '{ value.Alarm.Title }'.");
+                            return;
+                        }
+
+                        ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).RemoveAt(value.AlarmIndex);
+
+                        context.Reply($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
+                    },
+                    OnFailure = (ctx, reason) =>
+                    {
+                        this.ClearActiveTopic();
+
+                        context.Reply("Let's try something else.");
+
+                        this.ShowDefaultMessage(context);
+                    }
+                };
+            });
         }
 
         public override Task OnReceiveActivity(IBotContext context)
@@ -55,6 +85,13 @@ namespace AlarmBot.Topics
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
                     this.SetActiveTopic(ADD_ALARM_TOPIC);
+                    this.ActiveTopic.OnReceiveActivity(context);
+                    return Task.CompletedTask;
+                }
+
+                if (message.Text.ToLowerInvariant() == "delete alarm")
+                {
+                    this.SetActiveTopic(DELETE_ALARM_TOPIC);
                     this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
