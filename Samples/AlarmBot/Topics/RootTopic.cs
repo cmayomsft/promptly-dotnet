@@ -1,4 +1,5 @@
 ﻿using AlarmBot.Models;
+using AlarmBot.Views;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using PromptlyBot;
@@ -94,9 +95,18 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
+                if (message.Text.ToLowerInvariant() == "show alarms")
+                {
+                    this.ClearActiveTopic();
+
+                    AlarmsView.ShowAlarms(context, context.State.User[USER_STATE_ALARMS]);
+                    return Task.CompletedTask;
+                }
+
                 if (message.Text.ToLowerInvariant() == "help")
                 {
                     this.ClearActiveTopic();
+
                     this.ShowHelp(context);
                     return Task.CompletedTask;
                 }
