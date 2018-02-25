@@ -9,7 +9,7 @@
     <Authors>Chris Mayo</Authors>
     <Version>0.0.1</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
-    <Description>.NET Conversation modelling library building bots with Bot Builder SDK V4.</Description>
+    <Description>.NET Conversation modelling library for building bots with Bot Builder SDK V4.</Description>
     <PackageLicenseUrl>https://github.com/cmayomsft/promptly-dotnet</PackageLicenseUrl>
     <PackageProjectUrl>https://github.com/cmayomsft/promptly-dotnet</PackageProjectUrl>
     <RepositoryUrl>https://github.com/cmayomsft/promptly-dotnet</RepositoryUrl>
