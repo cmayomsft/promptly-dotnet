@@ -33,16 +33,6 @@ namespace AlarmBot.Topics
 
                             context.Reply("What would you like to name your alarm?");
                         })
-                    .OnPrompt((context, lastTurnReason) =>
-                        {
-                            if ((lastTurnReason != null) && (lastTurnReason == "titletoolong"))
-                            {
-                                context.Reply("Sorry, alarm titles must be less that 20 characters.")
-                                    .Reply("Let's try again.");
-                            }
-
-                            context.Reply("What would you like to name your alarm?");
-                        })
                     .Validator(new AlarmTitleValidator())
                     .MaxTurns(2)
                     .OnSuccess((context, value) =>
