@@ -2,13 +2,19 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <PackageId>Promptly-Bot</PackageId>
-    <Company />
+    <Company>Chris Mayo</Company>
     <Product />
-    <Authors>cincodemayo</Authors>
+    <Authors>Chris Mayo</Authors>
     <Version>0.0.1</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <Description>.NET Conversation modelling library building bots with Bot Builder SDK V4.</Description>
+    <PackageLicenseUrl>https://github.com/cmayomsft/promptly-dotnet</PackageLicenseUrl>
+    <PackageProjectUrl>https://github.com/cmayomsft/promptly-dotnet</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/cmayomsft/promptly-dotnet</RepositoryUrl>
+    <RepositoryType>GitHub</RepositoryType>
+    <PackageTags>Bot, chat, API, Bot Builder SDK, conversation, CUI</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>
