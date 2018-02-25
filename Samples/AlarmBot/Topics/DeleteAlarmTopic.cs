@@ -1,4 +1,5 @@
 ﻿using AlarmBot.Models;
+using AlarmBot.Views;
 using Microsoft.Bot.Builder;
 using PromptlyBot;
 using PromptlyBot.Validator;
@@ -49,7 +50,7 @@ namespace AlarmBot.Topics
                                 .Reply("Let's try again.");
                         }
 
-                        this.ShowAlarms(context, this._state.Alarms);
+                        AlarmsView.ShowAlarms(context, this._state.Alarms);
 
                         context.Reply("Which alarm would you like to delete?");
                     })
@@ -140,7 +141,7 @@ namespace AlarmBot.Topics
                 // If there is only one alarm to delete, use that index. No need to prompt.
                 if (this.State.Alarms.Count == 1)
                 {
-                    this.ShowAlarms(context, this.State.Alarms);
+                    AlarmsView.ShowAlarms(context, this.State.Alarms);
 
                     this.State.AlarmIndex = 0;
                 }
@@ -168,29 +169,6 @@ namespace AlarmBot.Topics
                 DeleteConfirmed = (bool)this.State.DeleteConfirmed
             });
             return Task.CompletedTask;
-        }
-
-        private void ShowAlarms(IBotContext context, List<Alarm> alarms)
-        {
-            if ((alarms == null) || (alarms.Count == 0))
-            {
-                context.Reply("You have no alarms.");
-                return;
-            }
-
-            if (alarms.Count == 1)
-            {
-                context.Reply($"You have one alarm named '{ alarms[0].Title }', set for '{ alarms[0].Time }'.");
-                return;
-            }
-
-            string message = $"You have { alarms.Count } alarms: \n\n";
-            foreach (var alarm in alarms)
-            {
-                message += $"'{ alarm.Title }' set for '{ alarm.Time }' \n\n";
-            }
-
-            context.Reply(message);
         }
     }
 
