@@ -4,7 +4,7 @@ using System;
 using System.Threading.Tasks;
 
 namespace PromptlyBot
-{
+{ 
     public class PromptState
     {
         public int? turns;
@@ -12,6 +12,43 @@ namespace PromptlyBot
 
     public class Prompt<TValue> : Topic<PromptState, TValue>
     {   
+        public class PromptFluentInterface
+        {
+            private readonly Prompt<TValue> _prompt;
+
+            public PromptFluentInterface(Prompt<TValue> prompt)
+            {
+                this._prompt = prompt;
+            }
+
+            public PromptFluentInterface OnPrompt(Action<IBotContext, string> onPrompt)
+            {
+                _prompt._onPrompt = onPrompt;
+                return this;
+            }
+
+            public PromptFluentInterface MaxTurns(int maxTurns)
+            {
+                _prompt._maxTurns = maxTurns;
+                return this;
+            }
+
+            public PromptFluentInterface Validator(Validator<TValue> validator)
+            {
+                _prompt._validator = validator;
+                return this;
+            }
+        }
+
+        private readonly PromptFluentInterface _set;
+
+        public Prompt() : base ()
+        {
+            this._set = new PromptFluentInterface(this);
+        }
+
+        public PromptFluentInterface Set { get => _set; }
+
         private Action<IBotContext, string> _onPrompt;
         public Action<IBotContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
         public Prompt<TValue> SetOnPrompt(Action<IBotContext, string> onPrompt)
