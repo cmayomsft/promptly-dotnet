@@ -84,15 +84,15 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
-                    this.SetActiveTopic(ADD_ALARM_TOPIC);
-                    this.ActiveTopic.OnReceiveActivity(context);
+                    this.SetActiveTopic(ADD_ALARM_TOPIC)
+                            .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
                 if (message.Text.ToLowerInvariant() == "delete alarm")
                 {
-                    this.SetActiveTopic(DELETE_ALARM_TOPIC);
-                    this.ActiveTopic.OnReceiveActivity(context);
+                    this.SetActiveTopic(DELETE_ALARM_TOPIC)
+                        .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 

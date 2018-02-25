@@ -21,11 +21,13 @@ namespace PromptlyBot
         public Dictionary<string, Func<ITopic>> SubTopics { get => _subTopics; }
 
         private ITopic _activeTopic;
-        public void SetActiveTopic(string subTopicKey)
+        public ITopic SetActiveTopic(string subTopicKey)
         {
             this._activeTopic = this._subTopics[subTopicKey]();
 
             this._state.ActiveTopic = new ActiveTopicState { Key = subTopicKey, State = this._activeTopic.State };
+
+            return this._activeTopic;
         }
         public ITopic ActiveTopic
         {
