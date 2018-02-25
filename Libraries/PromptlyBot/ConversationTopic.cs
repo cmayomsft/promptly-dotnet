@@ -17,6 +17,15 @@ namespace PromptlyBot
 
     public abstract class ConversationTopic<TState> : Topic<TState> where TState : ConversationTopicState, new()
     {
+        private readonly ConversationTopicFluentInterface _set;
+
+        public ConversationTopic() : base()
+        {
+            this._set = new ConversationTopicFluentInterface(this);
+        }
+
+        new public ConversationTopicFluentInterface Set { get => _set; }
+
         private Dictionary<string, Func<ITopic>> _subTopics = new Dictionary<string, Func<ITopic>>();
         public Dictionary<string, Func<ITopic>> SubTopics { get => _subTopics; }
 
@@ -53,18 +62,64 @@ namespace PromptlyBot
         public bool HasActiveTopic => (this._state.ActiveTopic != null);
 
         public void ClearActiveTopic() => this._state.ActiveTopic = null;
-    }
 
+        public class ConversationTopicFluentInterface
+        {
+            private readonly ConversationTopic<TState> _ConversationTopic;
+
+            public ConversationTopicFluentInterface(ConversationTopic<TState> conversationTopic)
+            {
+                this._ConversationTopic = conversationTopic;
+            }
+
+            public ConversationTopicFluentInterface OnSuccess(Action<IBotContext> onSuccess)
+            {
+                _ConversationTopic.OnSuccess = onSuccess;
+                return this;
+            }
+
+            public ConversationTopicFluentInterface OnFailure(Action<IBotContext, string> onFailure)
+            {
+                _ConversationTopic.OnFailure = onFailure;
+                return this;
+            }
+        }
+    }
 
     public abstract class ConversationTopic<TState, TValue> : ConversationTopic<TState> where TState : ConversationTopicState, new()
     {
+        private readonly ConversationTopicValueFluentInterface _set;
+
+        public ConversationTopic() : base()
+        {
+            this._set = new ConversationTopicValueFluentInterface(this);
+        }
+
+        new public ConversationTopicValueFluentInterface Set { get => _set; }
+
         private Action<IBotContext, TValue> _onSuccessValue;
         new public Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
-        public ConversationTopic<TState, TValue> SetOnSuccess(Action<IBotContext, TValue> onSuccess)
-        {
-            this._onSuccessValue = onSuccess;
 
-            return this;
+        public class ConversationTopicValueFluentInterface
+        {
+            private readonly ConversationTopic<TState, TValue> _ConversationTopicValue;
+
+            public ConversationTopicValueFluentInterface(ConversationTopic<TState, TValue> conversationTopicValue)
+            {
+                this._ConversationTopicValue = conversationTopicValue;
+            }
+
+            public ConversationTopicValueFluentInterface OnSuccess(Action<IBotContext, TValue> onSuccess)
+            {
+                _ConversationTopicValue.OnSuccess = onSuccess;
+                return this;
+            }
+
+            public ConversationTopicValueFluentInterface OnFailure(Action<IBotContext, string> onFailure)
+            {
+                _ConversationTopicValue.OnFailure = onFailure;
+                return this;
+            }
         }
     }
 

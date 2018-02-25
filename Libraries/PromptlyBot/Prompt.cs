@@ -12,34 +12,6 @@ namespace PromptlyBot
 
     public class Prompt<TValue> : Topic<PromptState, TValue>
     {   
-        public class PromptFluentInterface
-        {
-            private readonly Prompt<TValue> _prompt;
-
-            public PromptFluentInterface(Prompt<TValue> prompt)
-            {
-                this._prompt = prompt;
-            }
-
-            public PromptFluentInterface OnPrompt(Action<IBotContext, string> onPrompt)
-            {
-                _prompt._onPrompt = onPrompt;
-                return this;
-            }
-
-            public PromptFluentInterface MaxTurns(int maxTurns)
-            {
-                _prompt._maxTurns = maxTurns;
-                return this;
-            }
-
-            public PromptFluentInterface Validator(Validator<TValue> validator)
-            {
-                _prompt._validator = validator;
-                return this;
-            }
-        }
-
         private readonly PromptFluentInterface _set;
 
         public Prompt() : base ()
@@ -47,7 +19,7 @@ namespace PromptlyBot
             this._set = new PromptFluentInterface(this);
         }
 
-        public PromptFluentInterface Set { get => _set; }
+        new public PromptFluentInterface Set { get => _set; }
 
         private Action<IBotContext, string> _onPrompt;
         public Action<IBotContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
@@ -98,5 +70,46 @@ namespace PromptlyBot
             this.OnSuccess(context, validationResult.Value);
             return Task.CompletedTask;
         }
+
+        public class PromptFluentInterface
+        {
+            private readonly Prompt<TValue> _prompt;
+
+            public PromptFluentInterface(Prompt<TValue> prompt)
+            {
+                this._prompt = prompt;
+            }
+
+            public PromptFluentInterface OnPrompt(Action<IBotContext, string> onPrompt)
+            {
+                _prompt._onPrompt = onPrompt;
+                return this;
+            }
+
+            public PromptFluentInterface MaxTurns(int maxTurns)
+            {
+                _prompt._maxTurns = maxTurns;
+                return this;
+            }
+
+            public PromptFluentInterface Validator(Validator<TValue> validator)
+            {
+                _prompt._validator = validator;
+                return this;
+            }
+
+            public PromptFluentInterface OnSuccess(Action<IBotContext, TValue> onSuccess)
+            {
+                _prompt.OnSuccess = onSuccess;
+                return this;
+            }
+
+            public PromptFluentInterface OnFailure(Action<IBotContext, string> onFailure)
+            {
+                _prompt.OnFailure = onFailure;
+                return this;
+            }
+        }
+
     }
 }
