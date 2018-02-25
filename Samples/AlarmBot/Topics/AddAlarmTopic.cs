@@ -44,17 +44,16 @@ namespace AlarmBot.Topics
                             context.Reply("What would you like to name your alarm?");
                         })
                     .Validator(new AlarmTitleValidator())
-                    .MaxTurns(2);
+                    .MaxTurns(2)
+                    .OnSuccess((context, value) =>
+                        {
+                            this.ClearActiveTopic();
 
-                titlePrompt.SetOnSuccess((context, value) =>
-                    {
-                        this.ClearActiveTopic();
+                            this.State.alarm.Title = value;
 
-                        this.State.alarm.Title = value;
-
-                        this.OnReceiveActivity(context);
-                    })
-                    .SetOnFailure((context, reason) =>
+                            this.OnReceiveActivity(context);
+                        })
+                    .OnFailure((context, reason) =>
                     {
                         this.ClearActiveTopic();
 
@@ -79,10 +78,8 @@ namespace AlarmBot.Topics
                         context.Reply("What time would you like to set your alarm for?");
                     })
                     .Validator(new AlarmTimeValidator())
-                    .MaxTurns(2);
-
-                timePrompt
-                    .SetOnSuccess((context, value) =>
+                    .MaxTurns(2)
+                    .OnSuccess((context, value) =>
                     {
                         this.ClearActiveTopic();
 
@@ -90,7 +87,7 @@ namespace AlarmBot.Topics
 
                         this.OnReceiveActivity(context);
                     })
-                    .SetOnFailure((context, reason) =>
+                    .OnFailure((context, reason) =>
                     {
                         this.ClearActiveTopic();
 

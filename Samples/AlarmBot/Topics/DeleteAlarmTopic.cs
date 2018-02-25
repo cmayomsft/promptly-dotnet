@@ -54,10 +54,8 @@ namespace AlarmBot.Topics
                         context.Reply("Which alarm would you like to delete?");
                     })
                     .Validator(new AlarmIndexValidator(alarms))
-                    .MaxTurns(2);
-
-                whichAlarmPrompt
-                    .SetOnSuccess((context, index) =>
+                    .MaxTurns(2)
+                    .OnSuccess((context, index) =>
                         {
                             this.ClearActiveTopic();
 
@@ -65,7 +63,7 @@ namespace AlarmBot.Topics
 
                             this.OnReceiveActivity(context);
                         })
-                    .SetOnFailure(OnFailure = (context, reason) =>
+                    .OnFailure(OnFailure = (context, reason) =>
                         {
                             this.ClearActiveTopic();
 
@@ -96,10 +94,8 @@ namespace AlarmBot.Topics
                         context.Reply($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
                     })
                     .Validator(new YesOrNoValidator())
-                    .MaxTurns(2);
-
-                confirmDeletePrompt
-                    .SetOnSuccess((context, value) =>
+                    .MaxTurns(2)
+                    .OnSuccess((context, value) =>
                         {
                             this.ClearActiveTopic();
 
@@ -107,7 +103,7 @@ namespace AlarmBot.Topics
 
                             this.OnReceiveActivity(context);
                         })
-                    .SetOnFailure((context, reason) =>
+                    .OnFailure((context, reason) =>
                         {
                             this.ClearActiveTopic();
 

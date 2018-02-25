@@ -26,8 +26,10 @@ namespace AlarmBot.Topics
 
             this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
             {
-                return new AddAlarmTopic()
-                    .SetOnSuccess((ctx, alarm) =>
+                var addAlarmTopic = new AddAlarmTopic();
+
+                addAlarmTopic.Set
+                    .OnSuccess((ctx, alarm) =>
                         {
                             this.ClearActiveTopic();
 
@@ -35,43 +37,47 @@ namespace AlarmBot.Topics
 
                             context.Reply($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
                         })
-                    .SetOnFailure((ctx, reason) =>
-                    {
-                        this.ClearActiveTopic();
+                    .OnFailure((ctx, reason) =>
+                        {
+                            this.ClearActiveTopic();
 
-                        context.Reply("Let's try something else.");
+                            context.Reply("Let's try something else.");
+                            
+                            this.ShowDefaultMessage(ctx);
+                        });
 
-                        this.ShowDefaultMessage(context);
-                    });
+                return addAlarmTopic;
             });
 
             this.SubTopics.Add(DELETE_ALARM_TOPIC, () =>
             {
-                return new DeleteAlarmTopic(context.State.User[USER_STATE_ALARMS])
-                {
-                    OnSuccess = (ctx, value) =>
-                    {
-                        this.ClearActiveTopic();
+                var deleteAlarmTopic = new DeleteAlarmTopic(context.State.User[USER_STATE_ALARMS]);
 
-                        if (!value.DeleteConfirmed)
+                deleteAlarmTopic.Set
+                    .OnSuccess((ctx, value) =>
                         {
-                            context.Reply($"Ok, I won't delete alarm '{ value.Alarm.Title }'.");
-                            return;
-                        }
+                            this.ClearActiveTopic();
 
-                        ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).RemoveAt(value.AlarmIndex);
+                            if (!value.DeleteConfirmed)
+                            {
+                                context.Reply($"Ok, I won't delete alarm '{ value.Alarm.Title }'.");
+                                return;
+                            }
 
-                        context.Reply($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
-                    },
-                    OnFailure = (ctx, reason) =>
-                    {
-                        this.ClearActiveTopic();
+                            ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).RemoveAt(value.AlarmIndex);
 
-                        context.Reply("Let's try something else.");
+                            context.Reply($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
+                        })
+                    .OnFailure((ctx, reason) =>
+                        {
+                            this.ClearActiveTopic();
 
-                        this.ShowDefaultMessage(context);
-                    }
-                };
+                            context.Reply("Let's try something else.");
+
+                            this.ShowDefaultMessage(context);
+                        });
+
+                return deleteAlarmTopic;
             });
         }
 
