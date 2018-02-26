@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Adapters;
+using Microsoft.Bot.Builder.Middleware;
 using Microsoft.Bot.Builder.Storage;
+using Microsoft.Bot.Connector.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +11,7 @@ namespace Primitives
 {
     public class Startup
     {
+
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -20,11 +22,15 @@ namespace Primitives
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(
-                new Bot(new BotFrameworkAdapter(Configuration))
-                    .Use(new BotStateManager(new MemoryStorage())
-                )    
-            );
+            services.AddSingleton<BotFrameworkAdapter>(serviceProvider =>
+            {
+                string applicationId = Configuration.GetSection(MicrosoftAppCredentials.MicrosoftAppIdKey)?.Value;
+                string applicationPassword = Configuration.GetSection(MicrosoftAppCredentials.MicrosoftAppPasswordKey)?.Value;
+
+                return new BotFrameworkAdapter(applicationId, applicationPassword)
+                    .Use(new UserStateManagerMiddleware(new MemoryStorage()))
+                    .Use(new ConversationStateManagerMiddleware(new MemoryStorage()));
+            });
 
             services.AddMvc();
         }
