@@ -6,12 +6,12 @@ namespace PromptlyBot
     {
         public TopicsRoot(IBotContext context) : base()
         {
-            if (context.State.Conversation["RootTopic"] == null)
+            if (context.State.ConversationProperties["RootTopic"] == null)
             {
-                context.State.Conversation["RootTopic"] = new ConversationTopicState();
+                context.State.ConversationProperties["RootTopic"] = new ConversationTopicState();
             }
 
-            this.State = context.State.Conversation["RootTopic"];
+            this.State = context.State.ConversationProperties["RootTopic"];
         }
     }
 }
