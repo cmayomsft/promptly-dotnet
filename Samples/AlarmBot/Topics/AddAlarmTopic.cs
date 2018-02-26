@@ -8,7 +8,7 @@ namespace AlarmBot.Topics
 {
     public class AddAlarmTopicState : ConversationTopicState
     {
-        public Alarm alarm = new Alarm();
+        public Alarm Alarm = new Alarm();
     }
 
     public class AddAlarmTopic : ConversationTopic<AddAlarmTopicState, Alarm>
@@ -39,7 +39,7 @@ namespace AlarmBot.Topics
                         {
                             this.ClearActiveTopic();
 
-                            this.State.alarm.Title = value;
+                            this.State.Alarm.Title = value;
 
                             this.OnReceiveActivity(context);
                         })
@@ -73,7 +73,7 @@ namespace AlarmBot.Topics
                     {
                         this.ClearActiveTopic();
 
-                        this.State.alarm.Time = value;
+                        this.State.Alarm.Time = value;
 
                         this.OnReceiveActivity(context);
                     })
@@ -102,21 +102,21 @@ namespace AlarmBot.Topics
                 return Task.CompletedTask;
             }
 
-            if (this.State.alarm.Title == null)
+            if (this.State.Alarm.Title == null)
             {
                 this.SetActiveTopic(TITLE_PROMPT);
                 this.ActiveTopic.OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
-            if (this.State.alarm.Time == null)
+            if (this.State.Alarm.Time == null)
             {
                 this.SetActiveTopic(TIME_PROMPT);
                 this.ActiveTopic.OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
-            this.OnSuccess(context, this.State.alarm);
+            this.OnSuccess(context, this.State.Alarm);
 
             return Task.CompletedTask;
         }
