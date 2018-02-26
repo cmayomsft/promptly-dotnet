@@ -7,7 +7,7 @@
     <Company>Chris Mayo</Company>
     <Product />
     <Authors>Chris Mayo</Authors>
-    <Version>0.0.2</Version>
+    <Version>0.0.2.1</Version>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <Description>.NET Conversation modelling library for building bots with Bot Builder SDK V4.</Description>
     <PackageLicenseUrl>https://github.com/cmayomsft/promptly-dotnet</PackageLicenseUrl>

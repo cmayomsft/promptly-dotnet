@@ -15,6 +15,8 @@ namespace PromptlyBot
         public ActiveTopicState ActiveTopic;
     }
 
+    public delegate ITopic CreateSubTopicDelegate(params object[] args);
+
     public abstract class ConversationTopic<TState> : Topic<TState> where TState : ConversationTopicState, new()
     {
         private readonly ConversationTopicFluentInterface _set;
@@ -26,13 +28,20 @@ namespace PromptlyBot
 
         new public ConversationTopicFluentInterface Set { get => _set; }
 
-        private Dictionary<string, Func<ITopic>> _subTopics = new Dictionary<string, Func<ITopic>>();
-        public Dictionary<string, Func<ITopic>> SubTopics { get => _subTopics; }
+        private Dictionary<string, CreateSubTopicDelegate> _subTopics = new Dictionary<string, CreateSubTopicDelegate>();
+        public Dictionary<string, CreateSubTopicDelegate> SubTopics { get => _subTopics; }
 
         private ITopic _activeTopic;
-        public ITopic SetActiveTopic(string subTopicKey)
+        public ITopic SetActiveTopic(string subTopicKey, params object[] args)
         {
-            this._activeTopic = this._subTopics[subTopicKey]();
+            if (args.Length > 0)
+            {
+                this._activeTopic = this._subTopics[subTopicKey](args);
+            }
+            else
+            {
+                this._activeTopic = this._subTopics[subTopicKey]();
+            }
 
             this._state.ActiveTopic = new ActiveTopicState { Key = subTopicKey, State = this._activeTopic.State };
 

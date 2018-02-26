@@ -18,7 +18,7 @@ namespace AlarmBot.Topics
 
         public AddAlarmTopic() : base()
         {
-            this.SubTopics.Add(TITLE_PROMPT, () =>
+            this.SubTopics.Add(TITLE_PROMPT, (object[] args) =>
             {
                 var titlePrompt = new Prompt<string>();
 
@@ -58,7 +58,7 @@ namespace AlarmBot.Topics
                 return titlePrompt;
             });
 
-            this.SubTopics.Add(TIME_PROMPT, () =>
+            this.SubTopics.Add(TIME_PROMPT, (object[] args) =>
             {
                 var timePrompt = new Prompt<string>();
 

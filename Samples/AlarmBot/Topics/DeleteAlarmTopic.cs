@@ -37,7 +37,7 @@ namespace AlarmBot.Topics
                 this._state.Alarms = alarms;
             }
 
-            this.SubTopics.Add(WHICH_ALARM_PROMPT, () =>
+            this.SubTopics.Add(WHICH_ALARM_PROMPT, (object[] args) =>
             {
                 var whichAlarmPrompt = new Prompt<int>();
 
@@ -79,7 +79,7 @@ namespace AlarmBot.Topics
                 return whichAlarmPrompt;
             });
 
-            this.SubTopics.Add(CONFIRM_DELETE_PROMPT, () =>
+            this.SubTopics.Add(CONFIRM_DELETE_PROMPT, (object[] args) =>
             {
                 var confirmDeletePrompt = new Prompt<bool>();
 
