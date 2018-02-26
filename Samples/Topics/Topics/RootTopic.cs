@@ -66,7 +66,7 @@ namespace Topics.Topics
                 // If there is an active topic, let it handle this turn until it completes.
                 if (HasActiveTopic)
                 {
-                    ActiveTopic.OnReceiveActivity(context);
+                    this.ActiveTopic.OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
 
@@ -78,10 +78,14 @@ namespace Topics.Topics
 
         private void ShowDefaultMessage(IBotContext context)
         {
-            context.Reply("'Show Alarms', 'Add Alarm', 'Delete Alarm', 'Help'.");
+            context.Reply("'Add Alarm'.");
         }
     }
 }
+
+
+
+
             /*
             this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
             {

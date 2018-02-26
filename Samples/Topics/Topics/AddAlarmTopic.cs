@@ -8,7 +8,7 @@ namespace Topics.Topics
 {
     public class AddAlarmTopicState : ConversationTopicState
     {
-        public Alarm alarm = new Alarm();
+        public Alarm Alarm = new Alarm();
     }
 
     public class AddAlarmTopic : ConversationTopic<AddAlarmTopicState, Alarm>
@@ -39,7 +39,7 @@ namespace Topics.Topics
                     {
                         this.ClearActiveTopic();
 
-                        this.State.alarm.Title = value;
+                        this.State.Alarm.Title = value;
 
                         this.OnReceiveActivity(context);
                     })
@@ -73,7 +73,7 @@ namespace Topics.Topics
                     {
                         this.ClearActiveTopic();
 
-                        this.State.alarm.Time = value;
+                        this.State.Alarm.Time = value;
 
                         this.OnReceiveActivity(context);
                     })
@@ -98,27 +98,27 @@ namespace Topics.Topics
             // If there is an active topic, let it handle this turn until it completes.
             if (HasActiveTopic)
             {
-                ActiveTopic.OnReceiveActivity(context);
+                this.ActiveTopic.OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
             // If the topic needs state to complete, set the active topic to prompt for it.
-            if (this.State.alarm.Title == null)
+            if (this.State.Alarm.Title != null)
             {
-                this.SetActiveTopic(TITLE_PROMPT);
-                this.ActiveTopic.OnReceiveActivity(context);
+                this.SetActiveTopic(TITLE_PROMPT)
+                    .OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
-            if (this.State.alarm.Time == null)
+            if (this.State.Alarm.Time != null)
             {
-                this.SetActiveTopic(TIME_PROMPT);
-                this.ActiveTopic.OnReceiveActivity(context);
+                this.SetActiveTopic(TIME_PROMPT)
+                    .OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
             // When the topics has all the state it needs, it completes successfully.
-            this.OnSuccess(context, this.State.alarm);
+            this.OnSuccess(context, this.State.Alarm);
 
             return Task.CompletedTask;
         }
@@ -178,7 +178,7 @@ namespace Topics.Topics
                         {
                             this.ClearActiveTopic();
 
-                            this.State.alarm.Title = value;
+                            this.State.Alarm.Title = value;
 
                             this.OnReceiveActivity(context);
                         })
@@ -212,7 +212,7 @@ namespace Topics.Topics
                     {
                         this.ClearActiveTopic();
 
-                        this.State.alarm.Time = value;
+                        this.State.Alarm.Time = value;
 
                         this.OnReceiveActivity(context);
                     })
@@ -258,7 +258,7 @@ namespace Topics.Topics
             }
 
             // When the topics has all the state it needs, it completes successfully.
-            this.OnSuccess(context, this.State.alarm);
+            this.OnSuccess(context, this.State.Alarm);
 
             return Task.CompletedTask;
             */
