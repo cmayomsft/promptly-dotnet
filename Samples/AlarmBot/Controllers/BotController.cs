@@ -1,15 +1,13 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Schema;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Microsoft.Bot.Builder
+namespace AlarmBot.Controllers
 {
-    /// <summary>
-    /// Helper Bot Controller for ASP.NET Core
-    /// </summary>
     public abstract class BotController : Controller
     {
         protected readonly BotFrameworkAdapter _adapter;

@@ -87,8 +87,10 @@ namespace AlarmBot.Topics
             {
                 var message = context.Request.AsMessageActivity();
 
+                // If the user wants to change the topic of conversation...
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
+                    // Set the active topic and let the active topic handle this turn.
                     this.SetActiveTopic(ADD_ALARM_TOPIC)
                             .OnReceiveActivity(context);
                     return Task.CompletedTask;
@@ -117,6 +119,7 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
+                // If there is an active topic, let it handle this turn until it completes.
                 if (HasActiveTopic)
                 {
                     ActiveTopic.OnReceiveActivity(context);

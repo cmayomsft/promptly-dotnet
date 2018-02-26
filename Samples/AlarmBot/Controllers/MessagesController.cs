@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Schema;
-using PromptlyBot;
 using System.Threading.Tasks;
 
 namespace AlarmBot.Controllers
