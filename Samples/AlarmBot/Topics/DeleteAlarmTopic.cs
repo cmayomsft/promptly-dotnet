@@ -64,7 +64,7 @@ namespace AlarmBot.Topics
 
                             this.OnReceiveActivity(context);
                         })
-                    .OnFailure(OnFailure = (context, reason) =>
+                    .OnFailure((context, reason) =>
                         {
                             this.ClearActiveTopic();
 
