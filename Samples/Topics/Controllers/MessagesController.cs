@@ -1,11 +1,11 @@
-﻿using AlarmBot.Topics;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Adapters;
 using Microsoft.Bot.Schema;
 using System.Threading.Tasks;
+using Topics.Topics;
 
-namespace AlarmBot.Controllers
+namespace Topics.Controllers
 {
     [Route("api/[controller]")]
     public class MessagesController : BotController

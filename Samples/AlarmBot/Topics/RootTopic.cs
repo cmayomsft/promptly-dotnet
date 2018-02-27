@@ -19,12 +19,12 @@ namespace AlarmBot.Topics
         {
             // User state initialization should be done once in the welcome 
             //  new user feature. Placing it here until that feature is added.
-            if (context.State.User[USER_STATE_ALARMS] == null)
+            if (context.State.UserProperties[USER_STATE_ALARMS] == null)
             {
-                context.State.User[USER_STATE_ALARMS] = new List<Alarm>();
+                context.State.UserProperties[USER_STATE_ALARMS] = new List<Alarm>();
             }
 
-            this.SubTopics.Add(ADD_ALARM_TOPIC, (object[] args) =>
+            this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
             {
                 var addAlarmTopic = new AddAlarmTopic();
 
@@ -33,7 +33,7 @@ namespace AlarmBot.Topics
                         {
                             this.ClearActiveTopic();
 
-                            ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).Add(alarm);
+                            ((List<Alarm>)ctx.State.UserProperties[USER_STATE_ALARMS]).Add(alarm);
 
                             context.Reply($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
                         })
@@ -49,9 +49,9 @@ namespace AlarmBot.Topics
                 return addAlarmTopic;
             });
 
-            this.SubTopics.Add(DELETE_ALARM_TOPIC, (object[] args) =>
+            this.SubTopics.Add(DELETE_ALARM_TOPIC, () =>
             {
-                var deleteAlarmTopic = new DeleteAlarmTopic((List<Alarm>) args[0]);
+                var deleteAlarmTopic = new DeleteAlarmTopic(context.State.UserProperties[USER_STATE_ALARMS]);
 
                 deleteAlarmTopic.Set
                     .OnSuccess((ctx, value) =>
@@ -64,7 +64,7 @@ namespace AlarmBot.Topics
                                 return;
                             }
 
-                            ((List<Alarm>)ctx.State.User[USER_STATE_ALARMS]).RemoveAt(value.AlarmIndex);
+                            ((List<Alarm>)ctx.State.UserProperties[USER_STATE_ALARMS]).RemoveAt(value.AlarmIndex);
 
                             context.Reply($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
                         })
@@ -87,8 +87,10 @@ namespace AlarmBot.Topics
             {
                 var message = context.Request.AsMessageActivity();
 
+                // If the user wants to change the topic of conversation...
                 if (message.Text.ToLowerInvariant() == "add alarm")
                 {
+                    // Set the active topic and let the active topic handle this turn.
                     this.SetActiveTopic(ADD_ALARM_TOPIC)
                             .OnReceiveActivity(context);
                     return Task.CompletedTask;
@@ -96,7 +98,7 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "delete alarm")
                 {
-                    this.SetActiveTopic(DELETE_ALARM_TOPIC, context.State.User[USER_STATE_ALARMS])
+                    this.SetActiveTopic(DELETE_ALARM_TOPIC)
                         .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
@@ -105,7 +107,7 @@ namespace AlarmBot.Topics
                 {
                     this.ClearActiveTopic();
 
-                    AlarmsView.ShowAlarms(context, context.State.User[USER_STATE_ALARMS]);
+                    AlarmsView.ShowAlarms(context, context.State.UserProperties[USER_STATE_ALARMS]);
                     return Task.CompletedTask;
                 }
 
@@ -117,6 +119,7 @@ namespace AlarmBot.Topics
                     return Task.CompletedTask;
                 }
 
+                // If there is an active topic, let it handle this turn until it completes.
                 if (HasActiveTopic)
                 {
                     ActiveTopic.OnReceiveActivity(context);

@@ -6,8 +6,11 @@ using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Primitives.Controllers
+namespace Topics.Controllers
 {
+    /// <summary>
+    /// Helper Bot Controller for ASP.NET Core
+    /// </summary>
     public abstract class BotController : Controller
     {
         protected readonly BotFrameworkAdapter _adapter;

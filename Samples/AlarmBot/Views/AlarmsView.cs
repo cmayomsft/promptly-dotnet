@@ -1,9 +1,6 @@
 ﻿using AlarmBot.Models;
 using Microsoft.Bot.Builder;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace AlarmBot.Views
 {

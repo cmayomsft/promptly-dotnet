@@ -3,9 +3,7 @@ using AlarmBot.Views;
 using Microsoft.Bot.Builder;
 using PromptlyBot;
 using PromptlyBot.Validator;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
@@ -64,7 +62,7 @@ namespace AlarmBot.Topics
 
                             this.OnReceiveActivity(context);
                         })
-                    .OnFailure(OnFailure = (context, reason) =>
+                    .OnFailure((context, reason) =>
                         {
                             this.ClearActiveTopic();
 

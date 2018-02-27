@@ -1,4 +1,4 @@
-﻿namespace AlarmBot.Models
+﻿namespace Topics.Models
 {
     public class Alarm
     {
