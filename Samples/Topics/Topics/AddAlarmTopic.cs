@@ -103,14 +103,14 @@ namespace Topics.Topics
             }
 
             // If the topic needs state to complete, set the active topic to prompt for it.
-            if (this.State.Alarm.Title != null)
+            if (this.State.Alarm.Title == null)
             {
                 this.SetActiveTopic(TITLE_PROMPT)
                     .OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
-            if (this.State.Alarm.Time != null)
+            if (this.State.Alarm.Time == null)
             {
                 this.SetActiveTopic(TIME_PROMPT)
                     .OnReceiveActivity(context);
