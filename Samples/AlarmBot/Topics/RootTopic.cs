@@ -24,7 +24,7 @@ namespace AlarmBot.Topics
                 context.State.UserProperties[USER_STATE_ALARMS] = new List<Alarm>();
             }
 
-            this.SubTopics.Add(ADD_ALARM_TOPIC, (object[] args) =>
+            this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
             {
                 var addAlarmTopic = new AddAlarmTopic();
 

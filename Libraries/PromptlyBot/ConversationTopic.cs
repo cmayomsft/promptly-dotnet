@@ -17,6 +17,13 @@ namespace PromptlyBot
 
     public delegate ITopic CreateSubTopicDelegate(params object[] args);
 
+    public static class CreateSubTopicDictionaryExtensions
+    {
+        public static void Add(this Dictionary<string, CreateSubTopicDelegate> subtopics, string key, Func<ITopic> value)
+            => subtopics.Add(key, _ => value());
+    }
+        
+
     public abstract class ConversationTopic<TState> : Topic<TState> where TState : ConversationTopicState, new()
     {
         private readonly ConversationTopicFluentInterface _set;
