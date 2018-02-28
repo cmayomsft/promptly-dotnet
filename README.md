@@ -9,6 +9,6 @@ Promptly provides an API for developing everything from complex, multi-turn topi
 You can install the [Promptly-Bot package](https://www.nuget.org/packages/Promptly-Bot/) on nuget.
 
 ## Getting Started
-To get started clone/fork this repo, open the [Promptly-DotNet solution](promptly-dotnet.sln), and run/step through the [AlarmBot sample 'MessagesController'](Samples/AlarmBot/Controllers/MessagesController.cs).
+To get started clone/fork this repo, open the promptly-dotnet.sln, build the solution, and run/step through the [AlarmBot sample](Samples/AlarmBot/) starting at the ['MessagesController'](Samples/AlarmBot/Controllers/MessagesController.cs).
 
 A more detailed README is coming soon.
