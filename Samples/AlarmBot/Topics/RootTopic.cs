@@ -24,7 +24,7 @@ namespace AlarmBot.Topics
                 context.State.UserProperties[USER_STATE_ALARMS] = new List<Alarm>();
             }
 
-            this.SubTopics.Add(ADD_ALARM_TOPIC, () =>
+            this.SubTopics.Add(ADD_ALARM_TOPIC, (object[] args) =>
             {
                 var addAlarmTopic = new AddAlarmTopic();
 
@@ -49,9 +49,11 @@ namespace AlarmBot.Topics
                 return addAlarmTopic;
             });
 
-            this.SubTopics.Add(DELETE_ALARM_TOPIC, () =>
+            this.SubTopics.Add(DELETE_ALARM_TOPIC, (object[] args) =>
             {
-                var deleteAlarmTopic = new DeleteAlarmTopic(context.State.UserProperties[USER_STATE_ALARMS]);
+                var alarms = (args.Length > 0) ? (List<Alarm>)args[0] : null;
+
+                var deleteAlarmTopic = new DeleteAlarmTopic(alarms);
 
                 deleteAlarmTopic.Set
                     .OnSuccess((ctx, value) =>
@@ -98,7 +100,7 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "delete alarm")
                 {
-                    this.SetActiveTopic(DELETE_ALARM_TOPIC)
+                    this.SetActiveTopic(DELETE_ALARM_TOPIC, context.State.UserProperties[USER_STATE_ALARMS])
                         .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }

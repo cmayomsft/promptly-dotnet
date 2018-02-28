@@ -35,7 +35,7 @@ namespace AlarmBot.Topics
                 this._state.Alarms = alarms;
             }
 
-            this.SubTopics.Add(WHICH_ALARM_PROMPT, () =>
+            this.SubTopics.Add(WHICH_ALARM_PROMPT, (object[] args) =>
             {
                 var whichAlarmPrompt = new Prompt<int>();
 
@@ -52,7 +52,7 @@ namespace AlarmBot.Topics
 
                         context.Reply("Which alarm would you like to delete?");
                     })
-                    .Validator(new AlarmIndexValidator(alarms))
+                    .Validator(new AlarmIndexValidator(this._state.Alarms))
                     .MaxTurns(2)
                     .OnSuccess((context, index) =>
                         {
@@ -77,7 +77,7 @@ namespace AlarmBot.Topics
                 return whichAlarmPrompt;
             });
 
-            this.SubTopics.Add(CONFIRM_DELETE_PROMPT, () =>
+            this.SubTopics.Add(CONFIRM_DELETE_PROMPT, (object[] args) =>
             {
                 var confirmDeletePrompt = new Prompt<bool>();
 
