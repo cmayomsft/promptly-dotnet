@@ -52,7 +52,7 @@ namespace AlarmBot.Topics
 
                         context.Reply("Which alarm would you like to delete?");
                     })
-                    .Validator(new AlarmIndexValidator(alarms))
+                    .Validator(new AlarmIndexValidator(this._state.Alarms))
                     .MaxTurns(2)
                     .OnSuccess((context, index) =>
                         {
