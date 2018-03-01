@@ -47,7 +47,7 @@ Let's look at an example. Say, I wanted to build a simple bot that would intervi
 ### Key Prompt Pattern Concepts
 * Stateless Web API
 * Conversations are stateful
-* Turns
+* [Turns](https://en.wikipedia.org/wiki/Turn-taking)
 
 Promptly manages the state of the conversation between turns so you can focus on your CUI/UX of your bot.
 
