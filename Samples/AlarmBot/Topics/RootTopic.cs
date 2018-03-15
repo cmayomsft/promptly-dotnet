@@ -1,6 +1,7 @@
 ﻿using AlarmBot.Models;
 using AlarmBot.Views;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
 using PromptlyBot;
 using System.Collections.Generic;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class RootTopic : TopicsRoot
+    public class RootTopic : TopicsRoot<TopicsRootState>
     {
         private const string ADD_ALARM_TOPIC = "addAlarmTopic";
         private const string DELETE_ALARM_TOPIC = "deleteAlarmTopic";
@@ -19,9 +20,9 @@ namespace AlarmBot.Topics
         {
             // User state initialization should be done once in the welcome 
             //  new user feature. Placing it here until that feature is added.
-            if (context.State.UserProperties[USER_STATE_ALARMS] == null)
+            if (context.GetUserState<UserState>().Alarms == null)
             {
-                context.State.UserProperties[USER_STATE_ALARMS] = new List<Alarm>();
+                context.GetUserState<UserState>().Alarms = new List<Alarm>();
             }
 
             this.SubTopics.Add(ADD_ALARM_TOPIC, (object[] args) =>
@@ -33,15 +34,15 @@ namespace AlarmBot.Topics
                         {
                             this.ClearActiveTopic();
 
-                            ((List<Alarm>)ctx.State.UserProperties[USER_STATE_ALARMS]).Add(alarm);
+                            ctx.GetUserState<UserState>().Alarms.Add(alarm);
 
-                            context.Reply($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
+                            context.SendActivity($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
                         })
                     .OnFailure((ctx, reason) =>
                         {
                             this.ClearActiveTopic();
 
-                            context.Reply("Let's try something else.");
+                            context.SendActivity("Let's try something else.");
                             
                             this.ShowDefaultMessage(ctx);
                         });
@@ -62,19 +63,19 @@ namespace AlarmBot.Topics
 
                             if (!value.DeleteConfirmed)
                             {
-                                context.Reply($"Ok, I won't delete alarm '{ value.Alarm.Title }'.");
+                                context.SendActivity($"Ok, I won't delete alarm '{ value.Alarm.Title }'.");
                                 return;
                             }
 
-                            ((List<Alarm>)ctx.State.UserProperties[USER_STATE_ALARMS]).RemoveAt(value.AlarmIndex);
+                            ctx.GetUserState<UserState>().Alarms.RemoveAt(value.AlarmIndex);
 
-                            context.Reply($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
+                            context.SendActivity($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
                         })
                     .OnFailure((ctx, reason) =>
                         {
                             this.ClearActiveTopic();
 
-                            context.Reply("Let's try something else.");
+                            context.SendActivity("Let's try something else.");
 
                             this.ShowDefaultMessage(context);
                         });
@@ -100,7 +101,7 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "delete alarm")
                 {
-                    this.SetActiveTopic(DELETE_ALARM_TOPIC, context.State.UserProperties[USER_STATE_ALARMS])
+                    this.SetActiveTopic(DELETE_ALARM_TOPIC, context.GetUserState<UserState>().Alarms)
                         .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
@@ -109,7 +110,7 @@ namespace AlarmBot.Topics
                 {
                     this.ClearActiveTopic();
 
-                    AlarmsView.ShowAlarms(context, context.State.UserProperties[USER_STATE_ALARMS]);
+                    AlarmsView.ShowAlarms(context, context.GetUserState<UserState>().Alarms);
                     return Task.CompletedTask;
                 }
 
@@ -136,7 +137,7 @@ namespace AlarmBot.Topics
 
         private void ShowDefaultMessage(IBotContext context)
         {
-            context.Reply("'Show Alarms', 'Add Alarm', 'Delete Alarm', 'Help'.");
+            context.SendActivity("'Show Alarms', 'Add Alarm', 'Delete Alarm', 'Help'.");
         }
 
         private void ShowHelp(IBotContext context)
@@ -147,7 +148,7 @@ namespace AlarmBot.Topics
             message += "To delete an alarm, say 'Delete Alarm'.\n\n";
             message += "To see this again, say 'Help'.";
 
-            context.Reply(message);
+            context.SendActivity(message);
         }
     }
 }

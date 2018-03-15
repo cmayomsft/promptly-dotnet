@@ -27,11 +27,11 @@ namespace AlarmBot.Topics
                         {
                             if ((lastTurnReason != null) && (lastTurnReason == "titletoolong"))
                             {
-                                context.Reply("Sorry, alarm titles must be less that 20 characters.")
-                                    .Reply("Let's try again.");
+                                context.SendActivity("Sorry, alarm titles must be less that 20 characters.", 
+                                    "Let's try again.");
                             }
 
-                            context.Reply("What would you like to name your alarm?");
+                            context.SendActivity("What would you like to name your alarm?");
                         })
                     .Validator(new AlarmTitleValidator())
                     .MaxTurns(2)
@@ -49,7 +49,7 @@ namespace AlarmBot.Topics
 
                         if ((reason != null) && (reason == "toomanyattempts"))
                         {
-                            context.Reply("I'm sorry I'm having issues understanding you.");
+                            context.SendActivity("I'm sorry I'm having issues understanding you.");
                         }
 
                         this.OnFailure(context, reason);
@@ -65,7 +65,7 @@ namespace AlarmBot.Topics
                 timePrompt.Set
                     .OnPrompt((context, lastTurnReason) =>
                     {
-                        context.Reply("What time would you like to set your alarm for?");
+                        context.SendActivity("What time would you like to set your alarm for?");
                     })
                     .Validator(new AlarmTimeValidator())
                     .MaxTurns(2)
@@ -83,7 +83,7 @@ namespace AlarmBot.Topics
 
                         if ((reason != null) && (reason == "toomanyattempts"))
                         {
-                            context.Reply("I'm sorry I'm having issues understanding you.");
+                            context.SendActivity("I'm sorry I'm having issues understanding you.");
                         }
 
                         this.OnFailure(context, reason);

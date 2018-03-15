@@ -28,10 +28,11 @@ namespace AlarmBot
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddBot<AlarmBot>(options =>
+            services.AddBot<Bot>(options =>
             {
                 options.CredentialProvider = new ConfigurationCredentialProvider(Configuration);
-                options.Middleware.Add(new ConversationState<ConversationTopicState>(new MemoryStorage()));
+                options.Middleware.Add(new ConversationState<ConversationState>(new MemoryStorage()));
+                options.Middleware.Add(new UserState<UserState>(new MemoryStorage()));
                 options.EnableProactiveMessages = true;
             });
         }
