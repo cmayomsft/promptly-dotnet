@@ -44,13 +44,13 @@ namespace AlarmBot.Topics
                     {
                         if ((lastTurnReason != null) && (lastTurnReason == "indexnotfound"))
                         {
-                            context.Reply($"Sorry, I coulnd't find an alarm named '{ context.Request.AsMessageActivity().Text }'.")
-                                .Reply("Let's try again.");
+                            context.SendActivity($"Sorry, I coulnd't find an alarm named '{ context.Request.AsMessageActivity().Text }'.", 
+                                "Let's try again.");
                         }
 
                         AlarmsView.ShowAlarms(context, this._state.Alarms);
 
-                        context.Reply("Which alarm would you like to delete?");
+                        context.SendActivity("Which alarm would you like to delete?");
                     })
                     .Validator(new AlarmIndexValidator(this._state.Alarms))
                     .MaxTurns(2)
@@ -68,7 +68,7 @@ namespace AlarmBot.Topics
 
                             if ((reason != null) && (reason == "toomanyattempts"))
                             {
-                                context.Reply("I'm sorry I'm having issues understanding you.");
+                                context.SendActivity("I'm sorry I'm having issues understanding you.");
                             }
 
                             this.OnFailure(context, reason);
@@ -86,11 +86,11 @@ namespace AlarmBot.Topics
                     {
                         if ((lastTurnReason != null) & (lastTurnReason == "notyesorno"))
                         {
-                            context.Reply("Sorry, I was expecting 'yes' or 'no'.")
-                                .Reply("Let's try again.");
+                            context.SendActivity("Sorry, I was expecting 'yes' or 'no'.",
+                                "Let's try again.");
                         }
 
-                        context.Reply($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
+                        context.SendActivity($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
                     })
                     .Validator(new YesOrNoValidator())
                     .MaxTurns(2)
@@ -108,7 +108,7 @@ namespace AlarmBot.Topics
 
                             if ((reason != null) && (reason == "toomanyattempts"))
                             {
-                                context.Reply("I'm sorry I'm having issues understanding you.");
+                                context.SendActivity("I'm sorry I'm having issues understanding you.");
                             }
 
                             this.OnFailure(context, reason);
@@ -130,7 +130,7 @@ namespace AlarmBot.Topics
             // If there are no alarms to delete...
             if (this.State.Alarms.Count == 0)
             {
-                context.Reply("There are no alarms to delete.");
+                context.SendActivity("There are no alarms to delete.");
                 return Task.CompletedTask;
             }
 

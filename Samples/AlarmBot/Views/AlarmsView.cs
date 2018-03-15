@@ -10,13 +10,13 @@ namespace AlarmBot.Views
         {
             if ((alarms == null) || (alarms.Count == 0))
             {
-                context.Reply("You have no alarms.");
+                context.SendActivity("You have no alarms.");
                 return;
             }
 
             if (alarms.Count == 1)
             {
-                context.Reply($"You have one alarm named '{ alarms[0].Title }', set for '{ alarms[0].Time }'.");
+                context.SendActivity($"You have one alarm named '{ alarms[0].Title }', set for '{ alarms[0].Time }'.");
                 return;
             }
 
@@ -26,7 +26,7 @@ namespace AlarmBot.Views
                 message += $"'{ alarm.Title }' set for '{ alarm.Time }' \n\n";
             }
 
-            context.Reply(message);
+            context.SendActivity(message);
         }
     }
 }
