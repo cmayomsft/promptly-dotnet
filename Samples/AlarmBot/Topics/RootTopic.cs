@@ -9,20 +9,18 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class RootTopic : TopicsRoot<ConversationState>
+    public class RootTopic : TopicsRoot<BotConversationState>
     {
         private const string ADD_ALARM_TOPIC = "addAlarmTopic";
         private const string DELETE_ALARM_TOPIC = "deleteAlarmTopic";
-
-        private const string USER_STATE_ALARMS = "Alarms";
 
         public RootTopic(IBotContext context) : base(context)
         {
             // User state initialization should be done once in the welcome 
             //  new user feature. Placing it here until that feature is added.
-            if (context.GetUserState<UserState>().Alarms == null)
+            if (context.GetUserState<BotUserState>().Alarms == null)
             {
-                context.GetUserState<UserState>().Alarms = new List<Alarm>();
+                context.GetUserState<BotUserState>().Alarms = new List<Alarm>();
             }
 
             this.SubTopics.Add(ADD_ALARM_TOPIC, (object[] args) =>
@@ -34,7 +32,7 @@ namespace AlarmBot.Topics
                         {
                             this.ClearActiveTopic();
 
-                            ctx.GetUserState<UserState>().Alarms.Add(alarm);
+                            ctx.GetUserState<BotUserState>().Alarms.Add(alarm);
 
                             context.SendActivity($"Added alarm named '{ alarm.Title }' set for '{ alarm.Time }'.");
                         })
@@ -67,7 +65,7 @@ namespace AlarmBot.Topics
                                 return;
                             }
 
-                            ctx.GetUserState<UserState>().Alarms.RemoveAt(value.AlarmIndex);
+                            ctx.GetUserState<BotUserState>().Alarms.RemoveAt(value.AlarmIndex);
 
                             context.SendActivity($"Done. I've deleted alarm '{ value.Alarm.Title }'.");
                         })
@@ -101,7 +99,7 @@ namespace AlarmBot.Topics
 
                 if (message.Text.ToLowerInvariant() == "delete alarm")
                 {
-                    this.SetActiveTopic(DELETE_ALARM_TOPIC, context.GetUserState<UserState>().Alarms)
+                    this.SetActiveTopic(DELETE_ALARM_TOPIC, context.GetUserState<BotUserState>().Alarms)
                         .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
@@ -110,7 +108,7 @@ namespace AlarmBot.Topics
                 {
                     this.ClearActiveTopic();
 
-                    AlarmsView.ShowAlarms(context, context.GetUserState<UserState>().Alarms);
+                    AlarmsView.ShowAlarms(context, context.GetUserState<BotUserState>().Alarms);
                     return Task.CompletedTask;
                 }
 

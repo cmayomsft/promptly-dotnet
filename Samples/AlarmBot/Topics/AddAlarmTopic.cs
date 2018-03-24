@@ -104,15 +104,15 @@ namespace AlarmBot.Topics
 
             if (this.State.Alarm.Title == null)
             {
-                this.SetActiveTopic(TITLE_PROMPT);
-                this.ActiveTopic.OnReceiveActivity(context);
+                this.SetActiveTopic(TITLE_PROMPT)
+                    .OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 
             if (this.State.Alarm.Time == null)
             {
-                this.SetActiveTopic(TIME_PROMPT);
-                this.ActiveTopic.OnReceiveActivity(context);
+                this.SetActiveTopic(TIME_PROMPT)
+                    .OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 

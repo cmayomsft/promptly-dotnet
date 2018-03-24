@@ -4,9 +4,7 @@ using Microsoft.Bot.Builder.BotFramework;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Microsoft.Bot.Builder.Core.Extensions;
-using PromptlyBot;
 
 namespace AlarmBot
 {
@@ -31,8 +29,8 @@ namespace AlarmBot
             services.AddBot<Bot>(options =>
             {
                 options.CredentialProvider = new ConfigurationCredentialProvider(Configuration);
-                options.Middleware.Add(new ConversationState<ConversationState>(new MemoryStorage()));
-                options.Middleware.Add(new UserState<UserState>(new MemoryStorage()));
+                options.Middleware.Add(new ConversationState<BotConversationState>(new MemoryStorage()));
+                options.Middleware.Add(new UserState<BotUserState>(new MemoryStorage()));
                 options.EnableProactiveMessages = true;
             });
         }

@@ -145,8 +145,8 @@ namespace AlarmBot.Topics
                 }
                 else
                 {
-                    this.SetActiveTopic(WHICH_ALARM_PROMPT);
-                    this.ActiveTopic.OnReceiveActivity(context);
+                    this.SetActiveTopic(WHICH_ALARM_PROMPT)
+                        .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
             }
@@ -155,8 +155,8 @@ namespace AlarmBot.Topics
 
             if (this.State.DeleteConfirmed == null)
             {
-                this.SetActiveTopic(CONFIRM_DELETE_PROMPT);
-                this.ActiveTopic.OnReceiveActivity(context);
+                this.SetActiveTopic(CONFIRM_DELETE_PROMPT)
+                    .OnReceiveActivity(context);
                 return Task.CompletedTask;
             }
 

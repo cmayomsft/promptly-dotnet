@@ -8,11 +8,11 @@ using PromptlyBot;
 
 namespace AlarmBot
 {
-    public class ConversationState : TopicsRootState
+    public class BotConversationState : TopicsRootState
     {
     }
 
-    public class UserState: StoreItem
+    public class BotUserState: StoreItem
     {
         public List<Alarm> Alarms { get; set; }
     }
