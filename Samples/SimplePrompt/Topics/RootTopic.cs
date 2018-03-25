@@ -18,9 +18,10 @@ namespace SimplePrompt.Topics
         {
             this.SubTopics.Add("namePrompt", (object[] args) =>
             {
-                var namePrompt = new TextPrompt("What is your name?");
+                var namePrompt = new TextPrompt();
 
                 namePrompt.Set
+                    .OnPrompt("What is your name?")
                     .OnSuccess((ctx, value) =>
                     {
                         this.ClearActiveTopic();
@@ -43,9 +44,10 @@ namespace SimplePrompt.Topics
 
             this.SubTopics.Add("agePrompt", (object[] args) =>
             {
-                var agePrompt = new IntPrompt("How old are you?");
+                var agePrompt = new IntPrompt();
 
                 agePrompt.Set
+                    .OnPrompt("How old are you?")
                     .OnSuccess((ctx, value) =>
                     {
                         this.ClearActiveTopic();
