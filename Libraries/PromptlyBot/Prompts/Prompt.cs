@@ -1,9 +1,12 @@
 ﻿using Microsoft.Bot.Builder;
+using Microsoft.Bot.Schema;
 using PromptlyBot.Validator;
 using System;
 using System.Threading.Tasks;
+using System.Linq;
+using PromptlyBot.Validators;
 
-namespace PromptlyBot
+namespace PromptlyBot.Prompts
 { 
     public class PromptState
     {
@@ -19,12 +22,38 @@ namespace PromptlyBot
             this._set = new PromptFluentInterface(this);
         }
 
+        public Prompt(params string[] textRepliesToSend) : this()
+        {
+            this.CreateOnPrompt(textRepliesToSend);
+        }
+
+        public Prompt(params IActivity[] activities) : this ()
+        {
+            this.CreateOnPrompt(activities);
+        }
+
+        protected void CreateOnPrompt(params string[] textRepliesToSend)
+        {
+            var activities = textRepliesToSend
+                .Select(t => new Activity(ActivityTypes.Message) { Text = t })
+                .ToArray();
+
+            this.CreateOnPrompt(activities);
+        }
+
+        protected void CreateOnPrompt(params IActivity[] activities)
+        {
+            this._onPrompt = (context, lastTurnReason) => {
+                context.SendActivity(activities);
+            };
+        }
+
         new public PromptFluentInterface Set { get => _set; }
 
-        private Action<IBotContext, string> _onPrompt;
+        private Action<IBotContext, string> _onPrompt = (context, lastTurnReason) => { };
         public Action<IBotContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
 
-        private int _maxTurns = 2;
+        private int _maxTurns = int.MaxValue;
         public int MaxTurns { get => _maxTurns; set => _maxTurns = value; }
 
         private Validator<TValue> _validator;
