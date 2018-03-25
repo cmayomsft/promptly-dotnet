@@ -3,18 +3,21 @@ using Microsoft.Bot.Builder.Core.Extensions;
 
 namespace PromptlyBot
 {
-    public class TopicsRootState : StoreItem
+    public class PromptlyBotConversationState<TRootTopicState> : StoreItem 
+        where TRootTopicState : ConversationTopicState, new()
     {
-        public ConversationTopicState RootTopic { get; set; }
+        public TRootTopicState RootTopic { get; set; }
     }
     
-    public abstract class TopicsRoot<TConversationState> : ConversationTopic<ConversationTopicState> where TConversationState : TopicsRootState, new()
+    public abstract class TopicsRoot<TConversationState, TState> : ConversationTopic<TState> 
+        where TConversationState : PromptlyBotConversationState<TState>, new()
+        where TState : ConversationTopicState, new()
     {
         public TopicsRoot(IBotContext context) : base()
         {
             if (context.GetConversationState<TConversationState>().RootTopic == null)
             {
-                context.GetConversationState<TConversationState>().RootTopic = new ConversationTopicState();
+                context.GetConversationState<TConversationState>().RootTopic = new TState();
             }
 
             this.State = context.GetConversationState<TConversationState>().RootTopic;
