@@ -1,9 +1,8 @@
 ﻿using Microsoft.Bot.Builder;
 using Microsoft.Bot.Schema;
 using PromptlyBot;
-using PromptlyBot.Validator;
-using System;
 using System.Threading.Tasks;
+using PromptlyBot.Prompts;
 
 namespace SimplePrompt.Topics
 {
@@ -19,15 +18,9 @@ namespace SimplePrompt.Topics
         {
             this.SubTopics.Add("namePrompt", (object[] args) =>
             {
-                var namePrompt = new Prompt<string>();
+                var namePrompt = new TextPrompt("What is your name?");
 
                 namePrompt.Set
-                    .OnPrompt((ctx, lastTurnReason) =>
-                    {
-                        context.SendActivity("What is your name?");
-                    })
-                    .Validator(new TextValidator())
-                    .MaxTurns(2)
                     .OnSuccess((ctx, value) =>
                     {
                         this.ClearActiveTopic();
@@ -50,15 +43,9 @@ namespace SimplePrompt.Topics
 
             this.SubTopics.Add("agePrompt", (object[] args) =>
             {
-                var agePrompt = new Prompt<int>();
+                var agePrompt = new IntPrompt("How old are you?");
 
                 agePrompt.Set
-                    .OnPrompt((ctx, lastTurnReason) =>
-                    {
-                        context.SendActivity("How old are you?");
-                    })
-                    .Validator(new IntValidator())
-                    .MaxTurns(2)
                     .OnSuccess((ctx, value) =>
                     {
                         this.ClearActiveTopic();
@@ -114,50 +101,6 @@ namespace SimplePrompt.Topics
             }
 
             return Task.CompletedTask;
-        }
-    }
-
-    public class TextValidator : Validator<string>
-    {
-        public override ValidatorResult<string> Validate(IBotContext context)
-        {
-            if ((context.Request.AsMessageActivity().Text != null) && (context.Request.AsMessageActivity().Text.Length > 0))
-            {
-                return new ValidatorResult<string>
-                {
-                    Value = context.Request.AsMessageActivity().Text
-                };
-            }
-            else
-            {
-                return new ValidatorResult<string>
-                {
-                    Reason = "nottext"
-                };
-            }
-        }
-    }
-
-    public class IntValidator : Validator<int>
-    {
-        public override ValidatorResult<int> Validate(IBotContext context)
-        {
-            int value;
-
-            if (Int32.TryParse(context.Request.AsMessageActivity().Text, out value))
-            {
-                return new ValidatorResult<int>
-                {
-                    Value = value
-                };
-            }
-            else
-            {
-                return new ValidatorResult<int>
-                {
-                    Reason = "notint"
-                };
-            }
         }
     }
 }
