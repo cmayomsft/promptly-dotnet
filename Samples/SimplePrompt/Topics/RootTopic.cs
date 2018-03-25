@@ -1,5 +1,4 @@
 ﻿using Microsoft.Bot.Builder;
-using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Schema;
 using PromptlyBot;
 using PromptlyBot.Validator;
@@ -42,6 +41,8 @@ namespace SimplePrompt.Topics
                         this.ClearActiveTopic();
 
                         context.SendActivity("I'm sorry I'm having issues understanding you.");
+
+                        this.OnReceiveActivity(context);
                     });
 
                 return namePrompt;
@@ -71,6 +72,8 @@ namespace SimplePrompt.Topics
                         this.ClearActiveTopic();
 
                         context.SendActivity("I'm sorry I'm having issues understanding you.");
+
+                        this.OnReceiveActivity(context);
                     });
 
                 return agePrompt;

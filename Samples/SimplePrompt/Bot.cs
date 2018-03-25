@@ -11,10 +11,6 @@ namespace SimplePrompt
     {
     }
 
-    public class BotUserState : StoreItem
-    {
-    }
-
     public class Bot : IBot
     {
         public Task OnReceiveActivity(IBotContext context)
