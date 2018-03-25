@@ -2,6 +2,7 @@
 using AlarmBot.Views;
 using Microsoft.Bot.Builder;
 using PromptlyBot;
+using PromptlyBot.Prompts;
 using PromptlyBot.Validator;
 using System.Collections.Generic;
 using System.Threading.Tasks;
