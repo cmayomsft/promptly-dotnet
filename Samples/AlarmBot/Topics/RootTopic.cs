@@ -9,7 +9,12 @@ using System.Threading.Tasks;
 
 namespace AlarmBot.Topics
 {
-    public class RootTopic : TopicsRoot<BotConversationState>
+    public class RootTopicState : ConversationTopicState
+    {
+
+    }
+
+    public class RootTopic : TopicsRoot<BotConversationState, RootTopicState>
     {
         private const string ADD_ALARM_TOPIC = "addAlarmTopic";
         private const string DELETE_ALARM_TOPIC = "deleteAlarmTopic";

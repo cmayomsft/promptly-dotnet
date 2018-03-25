@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using AlarmBot.Models;
+using AlarmBot.Topics;
 using Microsoft.Bot;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
@@ -8,7 +9,7 @@ using PromptlyBot;
 
 namespace AlarmBot
 {
-    public class BotConversationState : TopicsRootState
+    public class BotConversationState : PromptlyBotConversationState<RootTopicState>
     {
     }
 
