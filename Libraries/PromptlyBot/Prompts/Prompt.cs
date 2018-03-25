@@ -22,32 +22,6 @@ namespace PromptlyBot.Prompts
             this._set = new PromptFluentInterface(this);
         }
 
-        public Prompt(params string[] textRepliesToSend) : this()
-        {
-            this.CreateOnPrompt(textRepliesToSend);
-        }
-
-        public Prompt(params IActivity[] activities) : this ()
-        {
-            this.CreateOnPrompt(activities);
-        }
-
-        protected void CreateOnPrompt(params string[] textRepliesToSend)
-        {
-            var activities = textRepliesToSend
-                .Select(t => new Activity(ActivityTypes.Message) { Text = t })
-                .ToArray();
-
-            this.CreateOnPrompt(activities);
-        }
-
-        protected void CreateOnPrompt(params IActivity[] activities)
-        {
-            this._onPrompt = (context, lastTurnReason) => {
-                context.SendActivity(activities);
-            };
-        }
-
         new public PromptFluentInterface Set { get => _set; }
 
         private Action<IBotContext, string> _onPrompt = (context, lastTurnReason) => { };
@@ -112,6 +86,29 @@ namespace PromptlyBot.Prompts
             public PromptFluentInterface OnPrompt(Action<IBotContext, string> onPrompt)
             {
                 _prompt._onPrompt = onPrompt;
+                return this;
+            }
+
+            private Action<IBotContext, string> CreateOnPrompt(params IActivity[] activities)
+            {
+                return (context, lastTurnReason) => {
+                    context.SendActivity(activities);
+                };
+            }
+
+            public PromptFluentInterface OnPrompt(params string[] textRepliesToSend)
+            {
+                var activities = textRepliesToSend
+                    .Select(t => new Activity(ActivityTypes.Message) { Text = t })
+                    .ToArray();
+
+                this.OnPrompt(this.CreateOnPrompt(activities));
+                return this;
+            }
+
+            public PromptFluentInterface OnPrompt(params IActivity[] activities)
+            {
+                this.OnPrompt(this.CreateOnPrompt(activities));
                 return this;
             }
 

@@ -9,15 +9,5 @@ namespace PromptlyBot.Prompts
         {
             this.Validator = new TextValidator();
         }
-
-        public TextPrompt(params string[] textRepliesToSend) : this()
-        {
-            this.CreateOnPrompt(textRepliesToSend);
-        }
-
-        public TextPrompt(params IActivity[] activities) : this()
-        {
-            this.CreateOnPrompt(activities);
-        }
     }
 }

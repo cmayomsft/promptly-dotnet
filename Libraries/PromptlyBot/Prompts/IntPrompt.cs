@@ -12,15 +12,5 @@ namespace PromptlyBot.Prompts
         {
             this.Validator = new IntValidator();
         }
-
-        public IntPrompt(params string[] textRepliesToSend) : this()
-        {
-            this.CreateOnPrompt(textRepliesToSend);
-        }
-
-        public IntPrompt(params IActivity[] activities) : this()
-        {
-            this.CreateOnPrompt(activities);
-        }
     }
 }
