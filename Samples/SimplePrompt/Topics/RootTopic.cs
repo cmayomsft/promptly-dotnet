@@ -81,7 +81,7 @@ namespace SimplePrompt.Topics
                     return Task.CompletedTask;
                 }
 
-                // Prompt for name if we don't have it
+                // If you don't have the state you need, prompt for it
                 if (this.State.Name == null)
                 {
                     this.SetActiveTopic("namePrompt")
@@ -89,7 +89,6 @@ namespace SimplePrompt.Topics
                     return Task.CompletedTask;
                 }
 
-                // Prompt for age if we don't have it
                 if (this.State.Age == null)
                 {
                     this.SetActiveTopic("agePrompt")
@@ -97,7 +96,7 @@ namespace SimplePrompt.Topics
                     return Task.CompletedTask;
                 }
 
-                // Now that we have the state we need (age and name), use it!
+                // Now that you have the state you need (age and name), use it!
                 context.SendActivity($"Hello { this.State.Name }! You are { this.State.Age } years old.");
                 return Task.CompletedTask;
             }
