@@ -1,21 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.Bot;
+using PromptlyBot;
 using System.Threading.Tasks;
-using AlarmBot.Models;
-using AlarmBot.Topics;
-using Microsoft.Bot;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.Core.Extensions;
-using PromptlyBot;
+using SimplePrompt.Topics;
 
-namespace AlarmBot
+namespace SimplePrompt
 {
     public class BotConversationState : PromptlyBotConversationState<RootTopicState>
     {
-    }
-
-    public class BotUserState: StoreItem
-    {
-        public List<Alarm> Alarms { get; set; }
     }
 
     public class Bot : IBot

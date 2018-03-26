@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Bot.Builder.BotFramework;
+using Microsoft.Bot.Builder.Core.Extensions;
 using Microsoft.Bot.Builder.Integration.AspNet.Core;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Bot.Builder.Core.Extensions;
 
-namespace AlarmBot
+namespace SimplePrompt
 {
     public class Startup
     {
@@ -30,7 +30,6 @@ namespace AlarmBot
             {
                 options.CredentialProvider = new ConfigurationCredentialProvider(Configuration);
                 options.Middleware.Add(new ConversationState<BotConversationState>(new MemoryStorage()));
-                options.Middleware.Add(new UserState<BotUserState>(new MemoryStorage()));
                 options.EnableProactiveMessages = true;
             });
         }

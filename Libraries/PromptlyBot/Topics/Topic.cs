@@ -82,13 +82,13 @@ namespace PromptlyBot
         /// </summary>
         public abstract Task OnReceiveActivity(IBotContext context);
 
-        private Action<IBotContext> _onSuccess;
+        private Action<IBotContext> _onSuccess = (context) => { };
         /// <value>
         /// See <see cref = "ITopic.OnSuccess"/> for more details. 
         /// </value>
         public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
-        private Action<IBotContext, string> _onFailure;
+        private Action<IBotContext, string> _onFailure = (context, reason) => { };
         /// <summary>
         /// See <see cref = "ITopic.OnFailure"/> for more details. 
         /// </summary>
@@ -160,7 +160,7 @@ namespace PromptlyBot
         /// </value>
         new public TopicValueFluentInterface Set { get => _set; }
 
-        private Action<IBotContext, TValue> _onSuccessValue;
+        private Action<IBotContext, TValue> _onSuccessValue = (context, value) => { };
         /// <value>
         /// Gets/Sets the delegate to be called when the conversation topic completes successfully.
         /// </value>
