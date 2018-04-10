@@ -28,15 +28,7 @@ namespace SimplePrompt.Topics
 
                         this.State.Name = value;
 
-                        this.OnReceiveActivity(context);
-                    })
-                    .OnFailure((ctx, reason) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        context.SendActivity("I'm sorry I'm having issues understanding you.");
-
-                        this.OnReceiveActivity(context);
+                        this.OnReceiveActivity(ctx);
                     });
 
                 return namePrompt;
@@ -53,14 +45,6 @@ namespace SimplePrompt.Topics
                         this.ClearActiveTopic();
 
                         this.State.Age = value;
-
-                        this.OnReceiveActivity(context);
-                    })
-                    .OnFailure((ctx, reason) =>
-                    {
-                        this.ClearActiveTopic();
-
-                        context.SendActivity("I'm sorry I'm having issues understanding you.");
 
                         this.OnReceiveActivity(context);
                     });
