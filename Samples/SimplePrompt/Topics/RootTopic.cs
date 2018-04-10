@@ -16,47 +16,23 @@ namespace SimplePrompt.Topics
     {
         public RootTopic(IBotContext context) : base(context)
         {
-
-        }
-
-        public override Task OnReceiveActivity(IBotContext context)
-        {
-            if (context.Request.Type == ActivityTypes.Message)
-            {
-                // Check to see if there is an active topic.
-
-
-                // If you don't have the state you need, prompt for it
-
-
-                // Now that you have the state you need (age and name), use it!
-                context.SendActivity($"Hello { this.State.Name }! You are { this.State.Age } years old.");
-                return Task.CompletedTask;
-            }
-
-            return Task.CompletedTask;
-        }
-    }
-}
-
-            /*
             this.SubTopics.Add("namePrompt", (object[] args) =>
-                {
-                    var namePrompt = new TextPrompt();
+            {
+                var namePrompt = new TextPrompt();
 
-                    namePrompt.Set
-                        .OnPrompt("What's your name?")
-                        .OnSuccess((ctx, value) =>
-                        {
-                            this.ClearActiveTopic();
+                namePrompt.Set
+                    .OnPrompt("What is your name?")
+                    .OnSuccess((ctx, value) =>
+                    {
+                        this.ClearActiveTopic();
 
-                            this.State.Name = value;
+                        this.State.Name = value;
 
-                            this.OnReceiveActivity(ctx);
-                        });
+                        this.OnReceiveActivity(ctx);
+                    });
 
-                    return namePrompt;
-                });
+                return namePrompt;
+            });
 
             this.SubTopics.Add("agePrompt", (object[] args) =>
             {
@@ -75,9 +51,12 @@ namespace SimplePrompt.Topics
 
                 return agePrompt;
             });
-            */
+        }
 
-                /*
+        public override Task OnReceiveActivity(IBotContext context)
+        {
+            if (context.Request.Type == ActivityTypes.Message)
+            {
                 // Check to see if there is an active topic.
                 if (this.HasActiveTopic)
                 {
@@ -100,6 +79,13 @@ namespace SimplePrompt.Topics
                         .OnReceiveActivity(context);
                     return Task.CompletedTask;
                 }
-                */
 
+                // Now that you have the state you need (age and name), use it!
+                context.SendActivity($"Hello { this.State.Name }! You are { this.State.Age } years old.");
+                return Task.CompletedTask;
+            }
 
+            return Task.CompletedTask;
+        }
+    }
+}
