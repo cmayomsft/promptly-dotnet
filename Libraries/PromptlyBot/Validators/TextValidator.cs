@@ -8,7 +8,7 @@ namespace PromptlyBot.Validators
     {
         public override ValidatorResult<string> Validate(IBotContext context)
         {
-            if ((context.Request.AsMessageActivity().Text != null) && (context.Request.AsMessageActivity().Text.Length > 0))
+            if (!string.IsNullOrEmpty(context.Request.AsMessageActivity().Text))
             {
                 return new ValidatorResult<string>
                 {
