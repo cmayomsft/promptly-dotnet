@@ -25,17 +25,17 @@ namespace PromptlyBot
         /// <remarks>
         /// Called on each turn when the ITopic is the active topic of conversation.
         /// </remarks>
-        Task OnReceiveActivity(IBotContext context);
+        Task OnReceiveActivity(TurnContext context);
 
         /// <value>
         /// Gets/Sets the delegate to be called when the conversation topic completes successfully.
         /// </value>
-        Action<IBotContext> OnSuccess { get; set; }
+        Action<TurnContext> OnSuccess { get; set; }
 
         /// <value>
         /// Gets/Sets the delegate to be called when the conversation topic completes successfully.
         /// </value>
-        Action<IBotContext, string> OnFailure { get; set; }
+        Action<TurnContext, string> OnFailure { get; set; }
     }
 
     /// <summary>
@@ -80,19 +80,19 @@ namespace PromptlyBot
         /// <summary>
         /// See <see cref = "ITopic.OnReceiveActivity(IBotContext)"/> for more details. 
         /// </summary>
-        public abstract Task OnReceiveActivity(IBotContext context);
+        public abstract Task OnReceiveActivity(TurnContext context);
 
-        private Action<IBotContext> _onSuccess = (context) => { };
+        private Action<TurnContext> _onSuccess = (context) => { };
         /// <value>
         /// See <see cref = "ITopic.OnSuccess"/> for more details. 
         /// </value>
-        public Action<IBotContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
+        public Action<TurnContext> OnSuccess { get => _onSuccess; set => _onSuccess = value; }
 
-        private Action<IBotContext, string> _onFailure = (context, reason) => { };
+        private Action<TurnContext, string> _onFailure = (context, reason) => { };
         /// <summary>
         /// See <see cref = "ITopic.OnFailure"/> for more details. 
         /// </summary>
-        public Action<IBotContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
+        public Action<TurnContext, string> OnFailure { get => _onFailure; set => _onFailure = value; }
         
         /// <summary>
         /// Internal class to define the fluent API for <see cref="Topic{TState}"/>.
@@ -115,7 +115,7 @@ namespace PromptlyBot
             /// </summary>
             /// <param name="onSuccess">See <see cref="ITopic.OnSuccess"/>.</param>
             /// <returns>A reference to <c>this</c> for fluent API calls.</returns>
-            public TopicFluentInterface OnSuccess(Action<IBotContext> onSuccess)
+            public TopicFluentInterface OnSuccess(Action<TurnContext> onSuccess)
             {
                 _topic._onSuccess = onSuccess;
                 return this;
@@ -126,7 +126,7 @@ namespace PromptlyBot
             /// </summary>
             /// <param name="onFailure">See <see cref="ITopic.OnFailure"/>.</param>
             /// <returns>A reference to <c>this</c> for fluent API calls.</returns>
-            public TopicFluentInterface OnFailure(Action<IBotContext, string> onFailure)
+            public TopicFluentInterface OnFailure(Action<TurnContext, string> onFailure)
             {
                 _topic._onFailure = onFailure;
                 return this;
@@ -160,12 +160,12 @@ namespace PromptlyBot
         /// </value>
         new public TopicValueFluentInterface Set { get => _set; }
 
-        private Action<IBotContext, TValue> _onSuccessValue = (context, value) => { };
+        private Action<TurnContext, TValue> _onSuccessValue = (context, value) => { };
         /// <value>
         /// Gets/Sets the delegate to be called when the conversation topic completes successfully.
         /// </value>
         /// <remarks>Note: For <see cref="Topic{TState, TValue}"/>, this delegate acccepts param of type <c>TValue</c> so the <c>Topic</c> can return a value when it completes successfully.</remarks>
-        new public Action<IBotContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        new public Action<TurnContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
 
         /// <summary>
         /// Internal class to define the fluent API for <see cref="Topic{TState, TValue}"/>.
@@ -183,13 +183,13 @@ namespace PromptlyBot
                 this._topic = topic;
             }
 
-            public TopicValueFluentInterface OnSuccess(Action<IBotContext, TValue> onSuccess)
+            public TopicValueFluentInterface OnSuccess(Action<TurnContext, TValue> onSuccess)
             {
                 _topic._onSuccessValue = onSuccess;
                 return this;
             }
 
-            public TopicValueFluentInterface OnFailure(Action<IBotContext, string> onFailure)
+            public TopicValueFluentInterface OnFailure(Action<TurnContext, string> onFailure)
             {
                 _topic.OnFailure = onFailure;
                 return this;
