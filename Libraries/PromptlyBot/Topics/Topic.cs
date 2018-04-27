@@ -159,12 +159,12 @@ namespace PromptlyBot
         /// </value>
         new public TopicValueFluentInterface Set { get => _set; }
 
-        private Action<TurnContext, TValue> _onSuccessValue = (context, value) => { };
+        private Action<ITurnContext, TValue> _onSuccessValue = (context, value) => { };
         /// <value>
         /// Gets/Sets the delegate to be called when the conversation topic completes successfully.
         /// </value>
         /// <remarks>Note: For <see cref="Topic{TState, TValue}"/>, this delegate acccepts param of type <c>TValue</c> so the <c>Topic</c> can return a value when it completes successfully.</remarks>
-        new public Action<TurnContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        new public Action<ITurnContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
 
         /// <summary>
         /// Internal class to define the fluent API for <see cref="Topic{TState, TValue}"/>.
