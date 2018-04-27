@@ -24,8 +24,8 @@ namespace PromptlyBot.Prompts
 
         new public PromptFluentInterface Set { get => _set; }
 
-        private Action<IBotContext, string> _onPrompt = (context, lastTurnReason) => { };
-        public Action<IBotContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
+        private Action<ITurnContext, string> _onPrompt = (context, lastTurnReason) => { };
+        public Action<ITurnContext, string> OnPrompt { get => _onPrompt; set => _onPrompt = value; }
 
         private int _maxTurns = int.MaxValue;
         public int MaxTurns { get => _maxTurns; set => _maxTurns = value; }
@@ -33,7 +33,7 @@ namespace PromptlyBot.Prompts
         private Validator<TValue> _validator;
         public Validator<TValue> Validator { get => _validator; set => _validator = value; }
 
-        public override Task OnReceiveActivity(IBotContext context)
+        public override Task OnTurn(ITurnContext context)
         {
             // If this is the initial turn (turn 0), send the initial prompt.
             if (this._state.turns == null)
@@ -83,16 +83,16 @@ namespace PromptlyBot.Prompts
                 this._prompt = prompt;
             }
 
-            public PromptFluentInterface OnPrompt(Action<IBotContext, string> onPrompt)
+            public PromptFluentInterface OnPrompt(Action<ITurnContext, string> onPrompt)
             {
                 _prompt._onPrompt = onPrompt;
                 return this;
             }
 
-            private Action<IBotContext, string> CreateOnPrompt(params IActivity[] activities)
+            private Action<ITurnContext, string> CreateOnPrompt(params IActivity[] activities)
             {
-                return (context, lastTurnReason) => {
-                    context.SendActivity(activities);
+                return async (context, lastTurnReason) => {
+                    await context.SendActivities(activities);
                 };
             }
 
@@ -124,13 +124,13 @@ namespace PromptlyBot.Prompts
                 return this;
             }
 
-            public PromptFluentInterface OnSuccess(Action<IBotContext, TValue> onSuccess)
+            public PromptFluentInterface OnSuccess(Action<ITurnContext, TValue> onSuccess)
             {
                 _prompt.OnSuccess = onSuccess;
                 return this;
             }
 
-            public PromptFluentInterface OnFailure(Action<IBotContext, string> onFailure)
+            public PromptFluentInterface OnFailure(Action<ITurnContext, string> onFailure)
             {
                 _prompt.OnFailure = onFailure;
                 return this;

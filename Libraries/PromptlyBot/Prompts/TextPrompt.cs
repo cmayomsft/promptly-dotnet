@@ -1,5 +1,4 @@
-﻿using Microsoft.Bot.Schema;
-using PromptlyBot.Validators;
+﻿using PromptlyBot.Validators;
 
 namespace PromptlyBot.Prompts
 {
