@@ -76,9 +76,8 @@ namespace PromptlyBot
         /// </value>
         public TState State { get => _state; set => _state = value; }
 
-
         /// <summary>
-        /// See <see cref = "ITopic.OnReceiveActivity(IBotContext)"/> for more details. 
+        /// See <see cref = "ITopic.OnTurn(ITurnContext)"/> for more details. 
         /// </summary>
         public abstract Task OnTurn(ITurnContext context);
 
