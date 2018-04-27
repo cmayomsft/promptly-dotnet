@@ -81,13 +81,13 @@ namespace PromptlyBot
                 this._ConversationTopic = conversationTopic;
             }
 
-            public ConversationTopicFluentInterface OnSuccess(Action<TurnContext> onSuccess)
+            public ConversationTopicFluentInterface OnSuccess(Action<ITurnContext> onSuccess)
             {
                 _ConversationTopic.OnSuccess = onSuccess;
                 return this;
             }
 
-            public ConversationTopicFluentInterface OnFailure(Action<TurnContext, string> onFailure)
+            public ConversationTopicFluentInterface OnFailure(Action<ITurnContext, string> onFailure)
             {
                 _ConversationTopic.OnFailure = onFailure;
                 return this;
@@ -106,8 +106,8 @@ namespace PromptlyBot
 
         new public ConversationTopicValueFluentInterface Set { get => _set; }
 
-        private Action<TurnContext, TValue> _onSuccessValue;
-        new public Action<TurnContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
+        private Action<ITurnContext, TValue> _onSuccessValue;
+        new public Action<ITurnContext, TValue> OnSuccess { get => _onSuccessValue; set => _onSuccessValue = value; }
 
         public class ConversationTopicValueFluentInterface
         {
@@ -118,13 +118,13 @@ namespace PromptlyBot
                 this._ConversationTopicValue = conversationTopicValue;
             }
 
-            public ConversationTopicValueFluentInterface OnSuccess(Action<TurnContext, TValue> onSuccess)
+            public ConversationTopicValueFluentInterface OnSuccess(Action<ITurnContext, TValue> onSuccess)
             {
                 _ConversationTopicValue.OnSuccess = onSuccess;
                 return this;
             }
 
-            public ConversationTopicValueFluentInterface OnFailure(Action<TurnContext, string> onFailure)
+            public ConversationTopicValueFluentInterface OnFailure(Action<ITurnContext, string> onFailure)
             {
                 _ConversationTopicValue.OnFailure = onFailure;
                 return this;
