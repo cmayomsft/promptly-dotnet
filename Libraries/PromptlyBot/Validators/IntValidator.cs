@@ -7,7 +7,7 @@ namespace PromptlyBot.Validators
 
     public class IntValidator : Validator<int>
     {
-        public override ValidatorResult<int> Validate(IBotContext context)
+        public override ValidatorResult<int> Validate(ITurnContext context)
         {
             int value;
 
