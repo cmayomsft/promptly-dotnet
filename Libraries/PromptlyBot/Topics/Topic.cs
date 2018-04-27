@@ -25,7 +25,7 @@ namespace PromptlyBot
         /// <remarks>
         /// Called on each turn when the ITopic is the active topic of conversation.
         /// </remarks>
-        Task OnReceiveActivity(TurnContext context);
+        Task OnTurn(ITurnContext context);
 
         /// <value>
         /// Gets/Sets the delegate to be called when the conversation topic completes successfully.
@@ -80,7 +80,7 @@ namespace PromptlyBot
         /// <summary>
         /// See <see cref = "ITopic.OnReceiveActivity(IBotContext)"/> for more details. 
         /// </summary>
-        public abstract Task OnReceiveActivity(TurnContext context);
+        public abstract Task OnTurn(ITurnContext context);
 
         private Action<TurnContext> _onSuccess = (context) => { };
         /// <value>
