@@ -3,7 +3,7 @@ using Microsoft.Bot.Builder.Core.Extensions;
 
 namespace PromptlyBot
 {
-    public class PromptlyBotConversationState<TRootTopicState> : StoreItem 
+    public class PromptlyBotConversationState<TRootTopicState> 
         where TRootTopicState : ConversationTopicState, new()
     {
         public TRootTopicState RootTopic { get; set; }
@@ -13,14 +13,14 @@ namespace PromptlyBot
         where TConversationState : PromptlyBotConversationState<TState>, new()
         where TState : ConversationTopicState, new()
     {
-        public TopicsRoot(IBotContext context) : base()
+        public TopicsRoot(ITurnContext turnContext) : base()
         {
-            if (context.GetConversationState<TConversationState>().RootTopic == null)
+            if (turnContext.GetConversationState<TConversationState>().RootTopic == null)
             {
-                context.GetConversationState<TConversationState>().RootTopic = new TState();
+                turnContext.GetConversationState<TConversationState>().RootTopic = new TState();
             }
 
-            this.State = context.GetConversationState<TConversationState>().RootTopic;
+            this.State = turnContext.GetConversationState<TConversationState>().RootTopic;
         }
     }
 }
