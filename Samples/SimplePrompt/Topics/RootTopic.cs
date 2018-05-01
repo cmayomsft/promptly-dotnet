@@ -24,11 +24,11 @@ namespace SimplePrompt.Topics
                     .OnPrompt("What is your name?")
                     .OnSuccess((turn, value) =>
                     {
-                        this.ClearActiveTopic();
+                        ClearActiveTopic();
 
-                        this.State.Name = value;
-
-                        this.OnTurn(turn);
+                        State.Name = value;
+                        // Returns a Task, should be returned so OnTurn that called it can return that.
+                        OnTurn(turn);
                     });
 
                 return namePrompt;
@@ -42,11 +42,11 @@ namespace SimplePrompt.Topics
                     .OnPrompt("How old are you?")
                     .OnSuccess((turn, value) =>
                     {
-                        this.ClearActiveTopic();
+                        ClearActiveTopic();
 
-                        this.State.Age = value;
+                        State.Age = value;
 
-                        this.OnTurn(turn);
+                        OnTurn(turn);
                     });
 
                 return agePrompt;
@@ -58,31 +58,28 @@ namespace SimplePrompt.Topics
             if (turnContext.Activity.Type == ActivityTypes.Message)
             {
                 // Check to see if there is an active topic.
-                if (this.HasActiveTopic)
+                if (HasActiveTopic)
                 {
                     // Let the active topic handle this turn by passing context to it's OnReceiveActivity().
-                    this.ActiveTopic.OnTurn(turnContext);
-                    return Task.CompletedTask;
+                    return ActiveTopic
+                        .OnTurn(turnContext);
                 }
 
                 // If you don't have the state you need, prompt for it
-                if (this.State.Name == null)
+                if (State.Name == null)
                 {
-                    this.SetActiveTopic("namePrompt")
+                    return SetActiveTopic("namePrompt")
                         .OnTurn(turnContext);
-                    return Task.CompletedTask;
                 }
 
-                if (this.State.Age == null)
+                if (State.Age == null)
                 {
-                    this.SetActiveTopic("agePrompt")
+                    return SetActiveTopic("agePrompt")
                         .OnTurn(turnContext);
-                    return Task.CompletedTask;
                 }
 
                 // Now that you have the state you need (age and name), use it!
-                turnContext.SendActivity($"Hello { this.State.Name }! You are { this.State.Age } years old.");
-                return Task.CompletedTask;
+                return turnContext.SendActivity($"Hello { State.Name }! You are { State.Age } years old.");
             }
 
             return Task.CompletedTask;

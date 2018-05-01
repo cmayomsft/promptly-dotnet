@@ -17,9 +17,7 @@ namespace SimplePrompt
         {
             var rootTopic = new Topics.RootTopic(turnContext);
 
-            rootTopic.OnTurn(turnContext);
-
-            return Task.CompletedTask;
+            return rootTopic.OnTurn(turnContext);
         }
     }
 }
