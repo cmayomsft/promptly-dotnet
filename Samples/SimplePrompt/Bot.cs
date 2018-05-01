@@ -15,7 +15,7 @@ namespace SimplePrompt
     {
         public Task OnTurn(ITurnContext turnContext)
         {
-            var rootTopic = new Topics.RootTopic(turnContext);
+            var rootTopic = new RootTopic(turnContext);
 
             return rootTopic.OnTurn(turnContext);
         }

@@ -78,7 +78,6 @@ namespace SimplePrompt.Topics
                         .OnTurn(turnContext);
                 }
 
-                // Now that you have the state you need (age and name), use it!
                 return turnContext.SendActivity($"Hello { State.Name }! You are { State.Age } years old.");
             }
 
