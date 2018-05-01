@@ -41,38 +41,38 @@ namespace AlarmBot.Topics
                 var whichAlarmPrompt = new Prompt<int>();
 
                 whichAlarmPrompt.Set
-                    .OnPrompt((context, lastTurnReason) =>
+                    .OnPrompt((turn, lastTurnReason) =>
                     {
                         if ((lastTurnReason != null) && (lastTurnReason == "indexnotfound"))
                         {
-                            context.SendActivity($"Sorry, I coulnd't find an alarm named '{ context.Request.AsMessageActivity().Text }'.", 
+                            turn.SendActivity($"Sorry, I coulnd't find an alarm named '{ turn.Activity.Text }'.", 
                                 "Let's try again.");
                         }
 
-                        AlarmsView.ShowAlarms(context, this._state.Alarms);
+                        AlarmsView.ShowAlarms(turn, State.Alarms);
 
-                        context.SendActivity("Which alarm would you like to delete?");
+                        turn.SendActivity("Which alarm would you like to delete?");
                     })
-                    .Validator(new AlarmIndexValidator(this._state.Alarms))
+                    .Validator(new AlarmIndexValidator(State.Alarms))
                     .MaxTurns(2)
-                    .OnSuccess((context, index) =>
+                    .OnSuccess((turn, index) =>
                         {
-                            this.ClearActiveTopic();
+                            ClearActiveTopic();
 
-                            this.State.AlarmIndex = index;
+                            State.AlarmIndex = index;
 
-                            this.OnReceiveActivity(context);
+                            OnTurn(turn);
                         })
-                    .OnFailure((context, reason) =>
+                    .OnFailure((turn, reason) =>
                         {
-                            this.ClearActiveTopic();
+                            ClearActiveTopic();
 
                             if ((reason != null) && (reason == "toomanyattempts"))
                             {
-                                context.SendActivity("I'm sorry I'm having issues understanding you.");
+                                turn.SendActivity("I'm sorry I'm having issues understanding you.");
                             }
 
-                            this.OnFailure(context, reason);
+                            OnFailure(turn, reason);
                         });
 
                 return whichAlarmPrompt;
@@ -83,36 +83,36 @@ namespace AlarmBot.Topics
                 var confirmDeletePrompt = new Prompt<bool>();
 
                 confirmDeletePrompt.Set
-                    .OnPrompt((context, lastTurnReason) =>
+                    .OnPrompt((turn, lastTurnReason) =>
                     {
                         if ((lastTurnReason != null) & (lastTurnReason == "notyesorno"))
                         {
-                            context.SendActivity("Sorry, I was expecting 'yes' or 'no'.",
+                            turn.SendActivity("Sorry, I was expecting 'yes' or 'no'.",
                                 "Let's try again.");
                         }
 
-                        context.SendActivity($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
+                        turn.SendActivity($"Are you sure you want to delete alarm '{ this.State.Alarm.Title }' ('yes' or 'no')?`");
                     })
                     .Validator(new YesOrNoValidator())
                     .MaxTurns(2)
-                    .OnSuccess((context, value) =>
+                    .OnSuccess((turn, value) =>
                         {
-                            this.ClearActiveTopic();
+                            ClearActiveTopic();
 
-                            this.State.DeleteConfirmed = value;
+                            State.DeleteConfirmed = value;
 
-                            this.OnReceiveActivity(context);
+                            OnTurn(turn);
                         })
-                    .OnFailure((context, reason) =>
+                    .OnFailure((turn, reason) =>
                         {
-                            this.ClearActiveTopic();
+                            ClearActiveTopic();
 
                             if ((reason != null) && (reason == "toomanyattempts"))
                             {
-                                context.SendActivity("I'm sorry I'm having issues understanding you.");
+                                turn.SendActivity("I'm sorry I'm having issues understanding you.");
                             }
 
-                            this.OnFailure(context, reason);
+                            OnFailure(turn, reason);
                         });
 
                 return confirmDeletePrompt;
@@ -120,53 +120,51 @@ namespace AlarmBot.Topics
 
         }
 
-        public override Task OnReceiveActivity(IBotContext context)
+        public override Task OnTurn(ITurnContext turnContext)
         {
             if (HasActiveTopic)
             {
-                ActiveTopic.OnReceiveActivity(context);
-                return Task.CompletedTask;
+                return ActiveTopic.OnTurn(turnContext);
             }
 
             // If there are no alarms to delete...
-            if (this.State.Alarms.Count == 0)
+            if (State.Alarms.Count == 0)
             {
-                context.SendActivity("There are no alarms to delete.");
-                return Task.CompletedTask;
+                return turnContext.SendActivity("There are no alarms to delete.");
             }
 
-            if (this.State.AlarmIndex == null)
+            if (State.AlarmIndex == null)
             {
                 // If there is only one alarm to delete, use that index. No need to prompt.
-                if (this.State.Alarms.Count == 1)
+                if (State.Alarms.Count == 1)
                 {
-                    AlarmsView.ShowAlarms(context, this.State.Alarms);
+                    AlarmsView.ShowAlarms(turnContext, State.Alarms);
 
-                    this.State.AlarmIndex = 0;
+                    State.AlarmIndex = 0;
                 }
                 else
                 {
-                    this.SetActiveTopic(WHICH_ALARM_PROMPT)
-                        .OnReceiveActivity(context);
-                    return Task.CompletedTask;
+                    return SetActiveTopic(WHICH_ALARM_PROMPT)
+                        .OnTurn(turnContext);
                 }
             }
 
-            this.State.Alarm.Title = this.State.Alarms[(int)this.State.AlarmIndex].Title;
+            State.Alarm.Title = State.Alarms[(int)State.AlarmIndex].Title;
 
-            if (this.State.DeleteConfirmed == null)
+            if (State.DeleteConfirmed == null)
             {
-                this.SetActiveTopic(CONFIRM_DELETE_PROMPT)
-                    .OnReceiveActivity(context);
-                return Task.CompletedTask;
+                return SetActiveTopic(CONFIRM_DELETE_PROMPT)
+                    .OnTurn(turnContext);
             }
 
-            this.OnSuccess(context, new DeleteAlarmTopicValue
-            {
-                Alarm = this.State.Alarm,
-                AlarmIndex = (int)this.State.AlarmIndex,
-                DeleteConfirmed = (bool)this.State.DeleteConfirmed
-            });
+            OnSuccess(turnContext, 
+                new DeleteAlarmTopicValue
+                    {
+                        Alarm = this.State.Alarm,
+                        AlarmIndex = (int)State.AlarmIndex,
+                        DeleteConfirmed = (bool)State.DeleteConfirmed
+                    });
+
             return Task.CompletedTask;
         }
     }
@@ -180,9 +178,9 @@ namespace AlarmBot.Topics
             _alarms = alarms;
         }
 
-        public override ValidatorResult<int> Validate(IBotContext context)
+        public override ValidatorResult<int> Validate(ITurnContext turnContext)
         {
-            int index = this._alarms.FindIndex(alarm => alarm.Title.ToLowerInvariant() == context.Request.AsMessageActivity().Text.ToLowerInvariant());
+            int index = _alarms.FindIndex(alarm => alarm.Title.ToLowerInvariant() == turnContext.Activity.Text.ToLowerInvariant());
 
             if (index > -1)
             {
@@ -203,9 +201,9 @@ namespace AlarmBot.Topics
 
     public class YesOrNoValidator : Validator<bool>
     {
-        public override ValidatorResult<bool> Validate(IBotContext context)
+        public override ValidatorResult<bool> Validate(ITurnContext turnContext)
         {
-            var message = context.Request.AsMessageActivity().Text.ToLowerInvariant();
+            var message = turnContext.Activity.Text.ToLowerInvariant();
 
             if (message == "yes")
             {

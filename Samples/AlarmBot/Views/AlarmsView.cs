@@ -6,17 +6,17 @@ namespace AlarmBot.Views
 {
     public static class AlarmsView
     {
-        public static void ShowAlarms(IBotContext context, List<Alarm> alarms)
+        public static void ShowAlarms(ITurnContext turnContext, List<Alarm> alarms)
         {
             if ((alarms == null) || (alarms.Count == 0))
             {
-                context.SendActivity("You have no alarms.");
+                turnContext.SendActivity("You have no alarms.");
                 return;
             }
 
             if (alarms.Count == 1)
             {
-                context.SendActivity($"You have one alarm named '{ alarms[0].Title }', set for '{ alarms[0].Time }'.");
+                turnContext.SendActivity($"You have one alarm named '{ alarms[0].Title }', set for '{ alarms[0].Time }'.");
                 return;
             }
 
@@ -26,7 +26,7 @@ namespace AlarmBot.Views
                 message += $"'{ alarm.Title }' set for '{ alarm.Time }' \n\n";
             }
 
-            context.SendActivity(message);
+            turnContext.SendActivity(message);
         }
     }
 }
