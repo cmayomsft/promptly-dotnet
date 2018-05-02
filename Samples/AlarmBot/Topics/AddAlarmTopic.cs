@@ -104,6 +104,8 @@ namespace AlarmBot.Topics
 
             if (State.Alarm.Title == null)
             {
+                var s = SimulateAsyncMethod();
+
                 return SetActiveTopic(TITLE_PROMPT)
                     .OnTurn(turnContext);
             }
@@ -116,6 +118,12 @@ namespace AlarmBot.Topics
 
             OnSuccess(turnContext, State.Alarm);
             return Task.CompletedTask;
+
+            async Task<string> SimulateAsyncMethod()
+            {
+                await Task.Delay(1000);
+                return "Foo!";
+            }
         }
     }
 
