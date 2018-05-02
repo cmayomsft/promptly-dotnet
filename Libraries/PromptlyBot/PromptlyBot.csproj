@@ -24,8 +24,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Bot.Builder" Version="4.0.0-alpham3.2" />
-    <PackageReference Include="Microsoft.Bot.Builder.Core.Extensions" Version="4.0.0-alpham3.2" />
+    <PackageReference Include="Microsoft.Bot.Builder" Version="4.0.0-alpham4.2" />
+    <PackageReference Include="Microsoft.Bot.Builder.Core.Extensions" Version="4.0.0-alpham4.2" />
   </ItemGroup>
 
 </Project>
