@@ -95,27 +95,35 @@ namespace AlarmBot.Topics
 
         }
 
-        public override Task OnTurn(ITurnContext turnContext)
+        public override async Task OnTurn(ITurnContext turnContext)
         {
             if (HasActiveTopic)
             {
-                return ActiveTopic.OnTurn(turnContext);
+                await ActiveTopic.OnTurn(turnContext);
             }
-
-            if (State.Alarm.Title == null)
+            else if (State.Alarm.Title == null)
             {
-                return SetActiveTopic(TITLE_PROMPT)
+                var s = await SimulateAsyncMethod();
+
+                await SetActiveTopic(TITLE_PROMPT)
                     .OnTurn(turnContext);
             }
-
-            if (State.Alarm.Time == null)
+            else if (State.Alarm.Time == null)
             {
-                return SetActiveTopic(TIME_PROMPT)
+                await SetActiveTopic(TIME_PROMPT)
                     .OnTurn(turnContext);
             }
+            else
+            {
+                OnSuccess(turnContext, State.Alarm);
+                await Task.CompletedTask;
+            }
+        }
 
-            OnSuccess(turnContext, State.Alarm);
-            return Task.CompletedTask;
+        private async Task<string> SimulateAsyncMethod()
+        {
+            await Task.Delay(1000);
+            return "Foo!";
         }
     }
 
