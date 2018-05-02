@@ -13,20 +13,18 @@ namespace AlarmBot
     {
     }
 
-    public class BotUserState: StoreItem
+    public class BotUserState
     {
         public List<Alarm> Alarms { get; set; }
     }
 
     public class Bot : IBot
     {
-        public Task OnReceiveActivity(IBotContext context)
+        public Task OnTurn(ITurnContext turnContext)
         {
-            var rootTopic = new Topics.RootTopic(context);
+            var rootTopic = new Topics.RootTopic(turnContext);
 
-            rootTopic.OnReceiveActivity(context);
-
-            return Task.CompletedTask;
+            return rootTopic.OnTurn(turnContext);
         }
     }
 }

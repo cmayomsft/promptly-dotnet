@@ -13,13 +13,11 @@ namespace SimplePrompt
 
     public class Bot : IBot
     {
-        public Task OnReceiveActivity(IBotContext context)
+        public Task OnTurn(ITurnContext turnContext)
         {
-            var rootTopic = new Topics.RootTopic(context);
+            var rootTopic = new RootTopic(turnContext);
 
-            rootTopic.OnReceiveActivity(context);
-
-            return Task.CompletedTask;
+            return rootTopic.OnTurn(turnContext);
         }
     }
 }

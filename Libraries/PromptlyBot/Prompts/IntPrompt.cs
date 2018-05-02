@@ -1,8 +1,4 @@
-﻿using Microsoft.Bot.Schema;
-using PromptlyBot.Validators;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using PromptlyBot.Validators;
 
 namespace PromptlyBot.Prompts
 {

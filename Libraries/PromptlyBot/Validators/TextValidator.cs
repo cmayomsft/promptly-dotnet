@@ -6,13 +6,13 @@ namespace PromptlyBot.Validators
 {
     public class TextValidator : Validator<string>
     {
-        public override ValidatorResult<string> Validate(IBotContext context)
+        public override ValidatorResult<string> Validate(ITurnContext context)
         {
-            if ((context.Request.AsMessageActivity().Text != null) && (context.Request.AsMessageActivity().Text.Length > 0))
+            if ((context.Activity.Text != null) && (context.Activity.Text.Length > 0))
             {
                 return new ValidatorResult<string>
                 {
-                    Value = context.Request.AsMessageActivity().Text
+                    Value = context.Activity.Text
                 };
             }
             else

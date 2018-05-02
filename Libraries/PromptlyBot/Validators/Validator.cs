@@ -11,6 +11,6 @@ namespace PromptlyBot.Validator
 
     public abstract class Validator<TValue>
     {
-        public abstract ValidatorResult<TValue> Validate(IBotContext context);
+        public abstract ValidatorResult<TValue> Validate(ITurnContext context);
     }
 }
