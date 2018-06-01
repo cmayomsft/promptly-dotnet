@@ -1,5 +1,9 @@
 # promptly-dotnet
 
+**Promptly is a personal/experimental SDK and is not a supported Microsoft product. Use at your own risk.**
+
+**Promptly, like the Bot Builder SDK V4 it's based on, is in prerelease and subject to extensive change. Use at your own risk.**
+
 ## Overview
 Promptly is a .NET library for building chat bots using the [Bot Builder SDK V4 .NET](https://github.com/Microsoft/botbuilder-dotnet). 
 
